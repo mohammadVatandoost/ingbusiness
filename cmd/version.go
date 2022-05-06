@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	"git.cafebazaar.ir/divar/cloud-sand-boxing/pkg/info"
+	"github.com/mohammadVatandoost/ingbusiness/pkg/info"
 
 	"github.com/spf13/cobra"
 )

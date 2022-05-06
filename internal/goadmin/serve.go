@@ -9,7 +9,6 @@ import (
 	"os/signal"
 	"strconv"
 
-	"git.cafebazaar.ir/divar/cloud-sand-boxing/internal/database"
 	ginAdaptor "github.com/GoAdminGroup/go-admin/adapter/gin"
 	goAdminContext "github.com/GoAdminGroup/go-admin/context"
 	"github.com/GoAdminGroup/go-admin/engine"
@@ -24,6 +23,7 @@ import (
 	"github.com/GoAdminGroup/go-admin/template/types/form"
 	_ "github.com/GoAdminGroup/themes/adminlte" // for importing themes
 	_ "github.com/GoAdminGroup/themes/sword"    // for importing themes
+	"github.com/mohammadVatandoost/ingbusiness/internal/database"
 	"github.com/sirupsen/logrus"
 
 	"github.com/gin-gonic/gin"

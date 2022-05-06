@@ -3,12 +3,12 @@ package config
 import (
 	"strings"
 
-	"git.cafebazaar.ir/divar/cloud-sand-boxing/internal/core/grpc"
+	"github.com/mohammadVatandoost/ingbusiness/internal/core/grpc"
 
-	"git.cafebazaar.ir/divar/cloud-sand-boxing/internal/database"
-	"git.cafebazaar.ir/divar/cloud-sand-boxing/internal/goadmin"
-	"git.cafebazaar.ir/divar/cloud-sand-boxing/pkg/logger"
-	"git.cafebazaar.ir/divar/cloud-sand-boxing/pkg/prometheus"
+	"github.com/mohammadVatandoost/ingbusiness/internal/database"
+	"github.com/mohammadVatandoost/ingbusiness/internal/goadmin"
+	"github.com/mohammadVatandoost/ingbusiness/pkg/logger"
+	"github.com/mohammadVatandoost/ingbusiness/pkg/prometheus"
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"

@@ -8,7 +8,7 @@ import (
 
 var hmacSecret = []byte("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9")
 
-func Parse(signedMessage string) (*v1.authentication, error) {
+func Parse(signedMessage string) (Message, error) {
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		// Don't forget to validate the alg is what you expect:
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
@@ -19,9 +19,11 @@ func Parse(signedMessage string) (*v1.authentication, error) {
 		return hmacSampleSecret, nil
 	})
 
+	var msg Message
 	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
-		fmt.Println(claims["foo"], claims["nbf"])
-	} else {
-		fmt.Println(err)
+		fmt.Println(, claims["nbf"])
+		msg.UserName = claims["foo"]
 	}
+
+	return msg, fmt.Errorf("token is not valid")
 }

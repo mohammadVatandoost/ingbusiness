@@ -16,8 +16,7 @@ MOCKED_FOLDERS = $(patsubst %,%/mocks,$(MOCK_PACKAGES))
 
 
 SQL_MODELS= \
-	internal/experiment \
-	internal/serviceroute
+	internal/users
 
 SQL_FOLDERS = $(patsubst %,%,$(SQL_MODELS))
 

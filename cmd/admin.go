@@ -3,23 +3,16 @@ package main
 import (
 	"context"
 	"fmt"
+	"github.com/mohammadVatandoost/ingbusiness/internal/database"
+	"github.com/mohammadVatandoost/ingbusiness/internal/users"
+	"github.com/mohammadVatandoost/ingbusiness/pkg/logger"
 	"sync"
 	"syscall"
-	"time"
 
-	"git.cafebazaar.ir/divar/cloud-sand-boxing/internal/experiment"
-	"git.cafebazaar.ir/divar/cloud-sand-boxing/internal/serviceroute"
-	"git.cafebazaar.ir/divar/cloud-sand-boxing/pkg/logger"
-
-	"git.cafebazaar.ir/divar/cloud-sand-boxing/internal/clients"
-
-	"git.cafebazaar.ir/divar/cloud-sand-boxing/internal/database"
-
-	"git.cafebazaar.ir/divar/cloud-sand-boxing/internal/app/controller"
-	grpcAPI "git.cafebazaar.ir/divar/cloud-sand-boxing/internal/core/grpc"
-	restAPI "git.cafebazaar.ir/divar/cloud-sand-boxing/internal/core/rest"
-	"git.cafebazaar.ir/divar/cloud-sand-boxing/internal/goadmin"
-	cntext "git.cafebazaar.ir/divar/cloud-sand-boxing/pkg/context"
+	grpcAPI "github.com/mohammadVatandoost/ingbusiness/internal/core/grpc"
+	restAPI "github.com/mohammadVatandoost/ingbusiness/internal/core/rest"
+	"github.com/mohammadVatandoost/ingbusiness/internal/goadmin"
+	cntext "github.com/mohammadVatandoost/ingbusiness/pkg/context"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"google.golang.org/grpc"
@@ -54,30 +47,9 @@ func serveAdmin(cmd *cobra.Command, args []string) error {
 	if err != nil {
 		return fmt.Errorf("failed to create DB connection: %v", err.Error())
 	}
-	experimentDirectory := experiment.NewDirectory(log, db)
-	serviceRouteDirectory := serviceroute.NewDirectory(log, db)
+	usersDirectory := users.NewDirectory(log, db)
 
-	cFlag, err := clients.NewControlPlaneFlag(time.Duration(conf.GRPC.TimeOut) * time.Second)
-	if err != nil {
-		logrus.WithError(err).Panic("Failed to NewControlPlaneFlag")
-	}
-
-	cOverride, err := clients.NewControlPlaneOverride(time.Duration(conf.GRPC.TimeOut) * time.Second)
-	if err != nil {
-		logrus.WithError(err).Panic("Failed to NewControlPlaneOverride")
-	}
-
-	cCondition, err := clients.NewControlPlaneCondition(time.Duration(conf.GRPC.TimeOut) * time.Second)
-	if err != nil {
-		logrus.WithError(err).Panic("Failed to NewControlPlaneCondition")
-	}
-
-	cService, err := clients.NewControlPlaneService(time.Duration(conf.GRPC.TimeOut) * time.Second)
-	if err != nil {
-		logrus.WithError(err).Panic("Failed to NewControlPlaneService")
-	}
-
-	controlPlane := controller.New(experimentDirectory, serviceRouteDirectory, cFlag, cCondition, cOverride, cService)
+	//controlPlane := controller.New(experimentDirectory, serviceRouteDirectory, cFlag, cCondition, cOverride, cService)
 
 	serverREST := restAPI.New(controlPlane)
 	serverREST.Routes()

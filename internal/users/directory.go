@@ -3,7 +3,6 @@ package users
 import (
 	"context"
 	"database/sql"
-	"time"
 
 	"github.com/Masterminds/squirrel"
 	"github.com/sirupsen/logrus"
@@ -31,96 +30,70 @@ func (d *Directory) Close() error {
 	return d.db.Close()
 }
 
-func (d *Directory) AddExperiment(ctx context.Context, arg AddExperimentParams) (Experiment, error) {
-	experiment, err := d.querier.AddExperiment(ctx, arg)
+func (d *Directory) AddUser(ctx context.Context, arg AddUserParams) (User, error) {
+	user, err := d.querier.AddUser(ctx, arg)
 	if err != nil {
-		return experiment, status.Errorf(codes.Internal,
-			"unexpected error AddExperiment: %s", err.Error())
+		return user, status.Errorf(codes.Internal,
+			"unexpected error AddUser: %s", err.Error())
 	}
-	return experiment, nil
+	return user, nil
 }
 
-func (d *Directory) UpdateExperiment(ctx context.Context, arg UpdateExperimentParams) (Experiment, error) {
-	experiment, err := d.querier.UpdateExperiment(ctx, arg)
+func (d *Directory) UpdateUser(ctx context.Context, arg UpdateUserParams) (User, error) {
+	user, err := d.querier.UpdateUser(ctx, arg)
 	if err != nil {
-		return experiment, status.Errorf(codes.Internal, "unexpected error UpdateExperiment: %s", err.Error())
+		return user, status.Errorf(codes.Internal, "unexpected error UpdateUser: %s", err.Error())
 	}
-	return experiment, nil
+	return user, nil
 }
 
-func (d *Directory) GetExperiments(ctx context.Context) ([]Experiment, error) {
-	experiments, err := d.querier.GetExperiments(ctx)
+func (d *Directory) GetUsers(ctx context.Context) ([]User, error) {
+	users, err := d.querier.GetUsers(ctx)
 	if err != nil {
-		return nil, status.Errorf(codes.Internal, "unexpected error GetExperiments: %s", err.Error())
+		return nil, status.Errorf(codes.Internal, "unexpected error GetUsers: %s", err.Error())
 	}
-	return experiments, nil
+	return users, nil
 }
 
-func (d *Directory) GetExperiment(ctx context.Context, id int32) (Experiment, error) {
-	experiment, err := d.querier.GetExperiment(ctx, id)
+func (d *Directory) GetUser(ctx context.Context, id int32) (User, error) {
+	user, err := d.querier.GetUser(ctx, id)
 	if err != nil {
-		return experiment, status.Errorf(codes.Internal, "unexpected error GetExperiment: %s", err.Error())
+		return user, status.Errorf(codes.Internal, "unexpected error GetUser: %s", err.Error())
 	}
-	return experiment, nil
+	return user, nil
 }
 
-func (d *Directory) GetExperimentByName(ctx context.Context, name string) (Experiment, error) {
-	experiment, err := d.querier.GetExperimentByName(ctx, name)
+func (d *Directory) GetUserByEmail(ctx context.Context, email string) (User, error) {
+	user, err := d.querier.GetUserByEmail(ctx, email)
 	if err != nil {
-		return experiment, status.Errorf(codes.Internal, "unexpected error GetExperimentByName: %s", err.Error())
+		return user, status.Errorf(codes.Internal, "unexpected error GetUserByEmail: %s", err.Error())
 	}
-	return experiment, nil
+	return user, nil
 }
 
-func (d *Directory) GetExperimentsByActiveState(ctx context.Context, activeState bool) ([]Experiment, error) {
-	experiments, err := d.querier.GetExperimentsByActiveState(ctx, activeState)
+func (d *Directory) GetUserByPhone(ctx context.Context, phone string) (User, error) {
+	user, err := d.querier.GetUserByPhone(ctx, phone)
 	if err != nil {
-		return nil, status.Errorf(codes.Internal, "unexpected error GetExperimentByName: %s", err.Error())
+		return user, status.Errorf(codes.Internal, "unexpected error GetUserByPhone: %s", err.Error())
 	}
-	return experiments, nil
+	return user, nil
 }
 
-func (d *Directory) GetExperimentsBySameConditions(ctx context.Context,
-	arg GetExperimentsBySameConditionsParams) ([]Experiment, error) {
-	experiments, err := d.querier.GetExperimentsBySameConditions(ctx, arg)
+func (d *Directory) GetUserByUserName(ctx context.Context,
+	username string) (User, error) {
+	user, err := d.querier.GetUserByUserName(ctx, username)
 	if err != nil {
-		return nil,
-			status.Errorf(codes.Internal, "unexpected error GetExperimentsBySameConditions: %s",
+		return user,
+			status.Errorf(codes.Internal, "unexpected error GetUserByUserName: %s",
 				err.Error())
 	}
-	return experiments, nil
+	return user, nil
 }
 
-func (d *Directory) DeleteExperiment(ctx context.Context, id int32) (Experiment, error) {
-	exp, err := d.querier.DeleteExperiment(ctx, id)
+func (d *Directory) DeleteUser(ctx context.Context, id int32) (Experiment, error) {
+	user, err := d.querier.DeleteUser(ctx, id)
 	if err != nil {
-		return exp, status.Errorf(codes.Internal, "unexpected error DeleteExperiment: %s", err.Error())
+		return user, status.Errorf(codes.Internal, "unexpected error DeleteUser: %s", err.Error())
 	}
-	return exp, nil
-}
-
-func (d *Directory) GetExperimentsExceeded(ctx context.Context, endTime time.Time) ([]Experiment, error) {
-	experiments, err := d.querier.GetExperimentsExceeded(ctx, endTime)
-	if err != nil {
-		return nil, status.Errorf(codes.Internal, "unexpected error GetExperimentsExceeded: %s", err.Error())
-	}
-	return experiments, nil
-}
-
-func (d *Directory) DisableExperiment(ctx context.Context, id int32) (Experiment, error) {
-	experiment, err := d.querier.DisableExperiment(ctx, id)
-	if err != nil {
-		return experiment,
-			status.Errorf(codes.Internal, "unexpected error DisableExperiment: %s", err.Error())
-	}
-	return experiment, nil
-}
-
-func (d *Directory) EnableExperiment(ctx context.Context, id int32) (Experiment, error) {
-	experiment, err := d.querier.EnableExperiment(ctx, id)
-	if err != nil {
-		return experiment,
-			status.Errorf(codes.Internal, "unexpected error EnableExperiment: %s", err.Error())
-	}
-	return experiment, nil
+	return user, nil
 }
