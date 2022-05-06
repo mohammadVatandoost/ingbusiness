@@ -1,0 +1,30 @@
+local_development/vars
+local_development/group_vars
+.python-version
+.idea/
+src/python/.idea
+src/.idea
+*_pb2.py
+*_pb2_grpc.py
+.env
+*.egg-info
+/.venv
+/.venv2
+build/
+dist/
+
+# GO
+*.pb.go
+*.autogen.go
+bin
+.bin
+*.lock
+mocks
+mock_*
+logs
+# Visual Studio Code
+.vscode
+debug.test
+.gitsecret/keys/random_seed
+!*.secret
+
