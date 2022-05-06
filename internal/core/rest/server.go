@@ -1,22 +1,19 @@
 package rest
 
 import (
-	"git.cafebazaar.ir/divar/cloud-sand-boxing/internal/app/controller"
-	"git.cafebazaar.ir/divar/cloud-sand-boxing/pkg/logger"
 	"github.com/gin-gonic/gin"
+	"github.com/mohammadVatandoost/ingbusiness/pkg/logger"
 	"github.com/sirupsen/logrus"
 )
 
 type Server struct {
-	Engine       *gin.Engine
-	ControlPlane *controller.ControlPlane
-	logger       *logrus.Logger
+	Engine *gin.Engine
+	logger *logrus.Logger
 }
 
-func New(ControlPlane *controller.ControlPlane) *Server {
+func New() *Server {
 	return &Server{
-		ControlPlane: ControlPlane,
-		logger:       logger.NewLogger(),
-		Engine:       gin.New(),
+		logger: logger.NewLogger(),
+		Engine: gin.New(),
 	}
 }

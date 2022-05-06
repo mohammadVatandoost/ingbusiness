@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-option go_package = "ithub.com/mohammadVatandoost/ingbusiness/api/services/authentication/v1;authentication";
+option go_package = "github.com/mohammadVatandoost/ingbusiness/api/services/authentication/v1;authentication";
 
 
 message SignUpRequest {

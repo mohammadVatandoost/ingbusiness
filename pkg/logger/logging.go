@@ -5,7 +5,6 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/evalphobia/logrus_sentry"
 	"github.com/sirupsen/logrus"
 )
 
@@ -15,7 +14,7 @@ type Config struct {
 }
 
 const (
-	sentryDSN = "https://86bdc9ecf1e74deca447be05f2ac77f8@sentry.divar.ir/598"
+	sentryDSN = ""
 )
 
 func Initialize(config *Config) error {
@@ -32,21 +31,21 @@ func Initialize(config *Config) error {
 		DisableTimestamp: false,
 	})
 
-	if config.SentryEnabled {
-		hook, err := logrus_sentry.NewAsyncSentryHook(sentryDSN, []logrus.Level{
-			logrus.PanicLevel,
-			logrus.FatalLevel,
-			logrus.ErrorLevel,
-		})
-
-		if err != nil {
-			panic("failed to setup raven!")
-		}
-
-		hook.StacktraceConfiguration.Enable = true
-
-		logrus.AddHook(hook)
-	}
+	//if config.SentryEnabled {
+	//	hook, err := logrus_sentry.NewAsyncSentryHook(sentryDSN, []logrus.Level{
+	//		logrus.PanicLevel,
+	//		logrus.FatalLevel,
+	//		logrus.ErrorLevel,
+	//	})
+	//
+	//	if err != nil {
+	//		panic("failed to setup raven!")
+	//	}
+	//
+	//	hook.StacktraceConfiguration.Enable = true
+	//
+	//	logrus.AddHook(hook)
+	//}
 
 	return nil
 }
