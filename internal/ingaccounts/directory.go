@@ -73,7 +73,7 @@ func (d *Directory) UpdateIngAccountToken(ctx context.Context, arg UpdateIngAcco
 func (d *Directory) DeleteIngAccount(ctx context.Context, id int32) (IngAccount, error) {
 	ingAccount, err := d.querier.DeleteIngAccount(ctx, id)
 	if err != nil {
-		return exp, status.Errorf(codes.Internal, "unexpected error DeleteIngAccount: %s", err.Error())
+		return ingAccount, status.Errorf(codes.Internal, "unexpected error DeleteIngAccount: %s", err.Error())
 	}
 	return ingAccount, nil
 }

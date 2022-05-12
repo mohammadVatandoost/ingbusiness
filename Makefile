@@ -6,6 +6,7 @@ PBS = $(patsubst %.proto,%.pb.go,$(patsubst api%,pkg%,$(PROTOS)))
 MOCK_PACKAGES = \
 	internal/ingaccounts \
 	internal/users \
+	internal/savedmessages \
 	internal/clients
 
 MOCKED_FILES = $(shell find . -name DOES_NOT_EXIST_FILE $(patsubst %,-or -path "./%/mocks/*.go",$(MOCK_PACKAGES)))
@@ -17,6 +18,7 @@ MOCKED_FOLDERS = $(patsubst %,%/mocks,$(MOCK_PACKAGES))
 
 SQL_MODELS= \
 	internal/users \
+	internal/savedmessages \
 	internal/ingaccounts
 
 SQL_FOLDERS = $(patsubst %,%,$(SQL_MODELS))
