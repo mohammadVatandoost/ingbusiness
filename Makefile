@@ -4,8 +4,8 @@ SRCS = $(patsubst ./%,%,$(shell find . -name "*.go" -not -path "*vendor*" -not -
 PBS = $(patsubst %.proto,%.pb.go,$(patsubst api%,pkg%,$(PROTOS)))
 
 MOCK_PACKAGES = \
-	internal/experiment \
-	internal/serviceroute \
+	internal/ingaccounts \
+	internal/users \
 	internal/clients
 
 MOCKED_FILES = $(shell find . -name DOES_NOT_EXIST_FILE $(patsubst %,-or -path "./%/mocks/*.go",$(MOCK_PACKAGES)))
@@ -16,7 +16,8 @@ MOCKED_FOLDERS = $(patsubst %,%/mocks,$(MOCK_PACKAGES))
 
 
 SQL_MODELS= \
-	internal/users
+	internal/users \
+	internal/ingaccounts
 
 SQL_FOLDERS = $(patsubst %,%,$(SQL_MODELS))
 

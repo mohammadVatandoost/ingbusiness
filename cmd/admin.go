@@ -9,13 +9,11 @@ import (
 	"sync"
 	"syscall"
 
-	grpcAPI "github.com/mohammadVatandoost/ingbusiness/internal/core/grpc"
 	restAPI "github.com/mohammadVatandoost/ingbusiness/internal/core/rest"
 	"github.com/mohammadVatandoost/ingbusiness/internal/goadmin"
 	cntext "github.com/mohammadVatandoost/ingbusiness/pkg/context"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
-	"google.golang.org/grpc"
 )
 
 var adminCmd = &cobra.Command{
@@ -51,10 +49,10 @@ func serveAdmin(cmd *cobra.Command, args []string) error {
 
 	//controlPlane := controller.New(experimentDirectory, serviceRouteDirectory, cFlag, cCondition, cOverride, cService)
 
-	serverREST := restAPI.New(controlPlane)
+	serverREST := restAPI.New()
 	serverREST.Routes()
 
-	goAdmin := goadmin.NewController(experimentDirectory, serviceRouteDirectory, controlPlane)
+	goAdmin := goadmin.NewController()
 	go func() {
 		e := goAdmin.ServeAdmin(conf.GoAdmin, database.LoadConfig(), serverREST.Engine)
 		if e != nil {
@@ -62,8 +60,8 @@ func serveAdmin(cmd *cobra.Command, args []string) error {
 		}
 	}()
 
-	grpcService := grpcAPI.New(experimentDirectory, serviceRouteDirectory, controlPlane, conf.GRPC)
-	grpcServer := getGrpcServer(grpcService, []grpc.UnaryServerInterceptor{})
+	//grpcService := grpcAPI.New(experimentDirectory, serviceRouteDirectory, controlPlane, conf.GRPC)
+	//grpcServer := getGrpcServer(grpcService, []grpc.UnaryServerInterceptor{})
 
 	serverContext, serverCancel := cntext.WithSignalCancellation(
 		context.Background(),
@@ -74,15 +72,15 @@ func serveAdmin(cmd *cobra.Command, args []string) error {
 	var serverWaitGroup sync.WaitGroup
 	serverWaitGroup.Add(1)
 
-	go func() {
-		defer serverWaitGroup.Done()
-		startGrpcServerOrPanic(conf.GRPC.ListenPort, grpcServer)
-	}()
+	//go func() {
+	//	defer serverWaitGroup.Done()
+	//	startGrpcServerOrPanic(conf.GRPC.ListenPort, grpcServer)
+	//}()
 
 	<-serverContext.Done()
-	go func() {
-		grpcServer.GracefulStop()
-	}()
+	//go func() {
+	//	grpcServer.GracefulStop()
+	//}()
 
 	serverWaitGroup.Wait()
 	return nil

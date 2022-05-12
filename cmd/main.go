@@ -6,12 +6,10 @@ import (
 	"os"
 
 	"github.com/mohammadVatandoost/ingbusiness/internal/config"
-	grpcAPI "github.com/mohammadVatandoost/ingbusiness/internal/core/grpc"
 	"github.com/mohammadVatandoost/ingbusiness/pkg/logger"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"google.golang.org/grpc"
-	"google.golang.org/grpc/reflection"
 )
 
 const serviceName = "instagram_helper"
@@ -37,14 +35,14 @@ func configureLoggerOrPanic(loggerConfig logger.Config) {
 	}
 }
 
-func getGrpcServer(grpcServicer *grpcAPI.ServiceImplementation,
-	interceptors []grpc.UnaryServerInterceptor) *grpc.Server {
-
-	baseServer := server.NewGrpc(serviceName, server.WithInterceptor(interceptors...))
-	reflection.Register(baseServer)
-
-	return baseServer
-}
+//func getGrpcServer(grpcServicer *grpcAPI.ServiceImplementation,
+//	interceptors []grpc.UnaryServerInterceptor) *grpc.Server {
+//
+//	baseServer := server.NewGrpc(serviceName, server.WithInterceptor(interceptors...))
+//	reflection.Register(baseServer)
+//
+//	return baseServer
+//}
 
 func startGrpcServerOrPanic(listenPort int, grpcServer *grpc.Server) {
 	grpcAddr := fmt.Sprintf(":%d", listenPort)
