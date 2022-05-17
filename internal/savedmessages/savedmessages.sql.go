@@ -5,7 +5,6 @@ package savedmessages
 
 import (
 	"context"
-	"database/sql"
 )
 
 const addSavedMessage = `-- name: AddSavedMessage :one
@@ -22,7 +21,7 @@ RETURNING id, message, ing_account_id, writer_id, create_time, update_time
 `
 
 type AddSavedMessageParams struct {
-	Message      sql.NullString
+	Message      string
 	IngAccountID int32
 	WriterID     int32
 }
@@ -189,7 +188,7 @@ RETURNING id, message, ing_account_id, writer_id, create_time, update_time
 
 type UpdateSavedMessageMessageParams struct {
 	ID      int32
-	Message sql.NullString
+	Message string
 }
 
 func (q *Queries) UpdateSavedMessageMessage(ctx context.Context, arg UpdateSavedMessageMessageParams) (SavedMessage, error) {

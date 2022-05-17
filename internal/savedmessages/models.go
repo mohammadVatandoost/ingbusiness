@@ -3,13 +3,12 @@
 package savedmessages
 
 import (
-	"database/sql"
 	"time"
 )
 
 type SavedMessage struct {
 	ID           int32
-	Message      sql.NullString
+	Message      string
 	IngAccountID int32
 	WriterID     int32
 	CreateTime   time.Time

@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+option go_package = "github.com/mohammadVatandoost/ingbusiness/api/services/savedmessages/v1;savedmessages";
+
+message SavedMessage {
+  int32  id = 1;
+  string messageContent = 2;
+  string image = 3;
+  int32  IngAccountID = 4;
+}

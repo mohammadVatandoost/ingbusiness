@@ -12,8 +12,6 @@ MOCK_PACKAGES = \
 MOCKED_FILES = $(shell find . -name DOES_NOT_EXIST_FILE $(patsubst %,-or -path "./%/mocks/*.go",$(MOCK_PACKAGES)))
 MOCKED_FOLDERS = $(patsubst %,%/mocks,$(MOCK_PACKAGES))
 
-#PROTO_MESSAGES = \
-#	api/services/authentication/v1/authentication.proto
 
 
 SQL_MODELS= \
@@ -25,6 +23,7 @@ SQL_FOLDERS = $(patsubst %,%,$(SQL_MODELS))
 
 PROTO_PACKAGES= \
 	api/services/authentication/v1 \
+	api/services/savedmessages/v1 \
 	api/services/ingmessenger/v1
 
 PROTO_FOLDERS = $(patsubst %,%,$(PROTO_PACKAGES))
