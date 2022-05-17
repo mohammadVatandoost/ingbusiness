@@ -23,6 +23,12 @@ SQL_MODELS= \
 
 SQL_FOLDERS = $(patsubst %,%,$(SQL_MODELS))
 
+PROTO_PACKAGES= \
+	api/services/authentication/v1 \
+	api/services/ingmessenger/v1
+
+PROTO_FOLDERS = $(patsubst %,%,$(PROTO_PACKAGES))
+
 help: ## Display this help screen
 	@grep -h -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
@@ -37,6 +43,11 @@ generate_sql: .bin/sqlc
 		.bin/sqlc generate -f $(dir)/sqlc.yaml; \
 	)
 
+generate_proto:
+	$(foreach dir,$(PROTO_FOLDERS), \
+		protoc --go_out=paths=source_relative:./ -I. $(dir)/*.proto; \
+		protoc --go_out=plugins=grpc:./ --go_opt=paths=source_relative $(dir)/*.proto; \
+	)
 
 get_list_files: $(SQL_FOLDERS) | .remove_empty_dirs ## to generate all auto-generated files
 .remove_empty_dirs:
@@ -122,5 +133,10 @@ CI_COMMIT_TAG ?=
 VERSION ?= $(strip $(if $(CI_COMMIT_TAG),$(CI_COMMIT_TAG),$(shell $(GIT) describe --tag 2> /dev/null || echo "$(COMMIT)")))
 BUILD_TIME := $(shell LANG=en_US date +"%F_%T_%z")
 LD_FLAGS := -X $(ROOT)/pkg/info.Version=$(VERSION) -X $(ROOT)/pkg/info.Commit=$(COMMIT) -X $(ROOT)/pkg/info.BuildTime=$(BUILD_TIME)
+
+
+GO_PBS_WITH_SUFFIX := $(addsuffix .pb.go, $(basename $(PROTOS)))
+GO_PBS = $(GO_PBS_WITH_SUFFIX:api/services/%=api/services/%)
+GO_PB_GWS = $(GO_PBS:%.pb.go=%.pb.gw.go)
 
 

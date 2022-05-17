@@ -26,3 +26,6 @@ func (auth *Auth) SignUp(ctx context.Context, in *v1.SignUpRequest) (string, err
 
 	return ConfirmEmail, nil
 }
+
+//ToDo: oauth2 :https://www.loginradius.com/blog/engineering/google-authentication-with-golang-and-goth/
+// https://github.com/markbates/goth

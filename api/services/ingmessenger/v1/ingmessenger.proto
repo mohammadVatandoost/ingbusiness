@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+option go_package = "github.com/mohammadVatandoost/ingbusiness/api/services/authentication/v1;authentication";
+
+
+message SignUpRequest {
+    string username = 1;
+    string email = 2;
+    string phoneNumber = 3;
+    string password = 4;
+}
+
+message SignUpResponse {
+  int32 userID = 1;
+  string token = 2;
+}
+
+message SignInRequest {
+  string username = 1; // one of them is required
+  string email = 2; // one of them is required
+  string phoneNumber = 3; // one of them is required
+  string password = 4;
+}
+
+message SignInResponse {
+  int32 userID = 1;
+  string token = 2;
+}

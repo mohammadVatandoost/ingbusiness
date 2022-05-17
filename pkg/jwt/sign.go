@@ -12,13 +12,6 @@ func Sign(msg Message) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	//jwt.MapClaims{
-	//	"id":        strconv.Itoa(msg.UserID),
-	//	"username":  msg.UserName,
-	//	"phone":     msg.Phone,
-	//	"email":     msg.Email,
-	//	"timestamp": time.Now().Unix(),
-	//}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, mapData)
 

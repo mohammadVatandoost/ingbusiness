@@ -1,4 +1,4 @@
-package messenger
+package ingmessenger
 
 import "github.com/mohammadVatandoost/instabot"
 
