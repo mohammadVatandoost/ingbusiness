@@ -70,7 +70,7 @@ func (d *Directory) GetSavedMessageByWriterID(ctx context.Context, writerID int3
 	return savedMessage, nil
 }
 
-func (d *Directory) DeleteIngAccount(ctx context.Context, id int32) (SavedMessage, error) {
+func (d *Directory) DeleteSavedMessage(ctx context.Context, id int32) (SavedMessage, error) {
 	savedMessage, err := d.querier.DeleteSavedMessage(ctx, id)
 	if err != nil {
 		return savedMessage, status.Errorf(codes.Internal, "unexpected error DeleteSavedMessage: %s", err.Error())

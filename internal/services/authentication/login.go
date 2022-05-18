@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-func (auth *Auth) SignIn(ctx context.Context, in *v1.SignInRequest) (*v1.SignInResponse, error) {
+func (s *Service) SignIn(ctx context.Context, in *v1.SignInRequest) (*v1.SignInResponse, error) {
 
 	pass, err := HashPassword(in.Password)
 	if err != nil {
@@ -18,7 +18,7 @@ func (auth *Auth) SignIn(ctx context.Context, in *v1.SignInRequest) (*v1.SignInR
 
 	var user users.User
 	if in.Email != "" {
-		user, err = auth.usersDirectory.GetUserByEmail(ctx, in.Email)
+		user, err = s.usersDirectory.GetUserByEmail(ctx, in.Email)
 		if err != nil {
 			return nil, err
 		}
@@ -26,7 +26,7 @@ func (auth *Auth) SignIn(ctx context.Context, in *v1.SignInRequest) (*v1.SignInR
 			return nil, fmt.Errorf("%v", ErrorWrongEmailOrPassword)
 		}
 	} else {
-		user, err = auth.usersDirectory.GetUserByUserName(ctx, in.Username)
+		user, err = s.usersDirectory.GetUserByUserName(ctx, in.Username)
 		if err != nil {
 			return nil, err
 		}

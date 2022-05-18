@@ -7,9 +7,9 @@ import (
 	"github.com/golang-jwt/jwt"
 )
 
-var hmacSecret = []byte("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9")
+//var hmacSecret = []byte("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9")
 
-func Parse(signedMessage string) (*Message, error) {
+func Parse(signedMessage string, hmacSecret []byte) (*Message, error) {
 	token, err := jwt.Parse(signedMessage, func(token *jwt.Token) (interface{}, error) {
 		// Don't forget to validate the alg is what you expect:
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {

@@ -5,7 +5,7 @@ import (
 	"github.com/mohammadVatandoost/instabot"
 )
 
-func (m *Messenger) GetUserProfile(token string, userID string) (*instabot.GetUserProfileResponse, error) {
+func (s *Service) GetUserProfile(token string, userID string) (*instabot.GetUserProfileResponse, error) {
 	bot, err := NewClient(token)
 	if err != nil {
 		return nil, err

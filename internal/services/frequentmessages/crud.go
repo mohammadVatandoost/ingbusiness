@@ -1,4 +1,4 @@
-package savedmessages
+package frequentmessages
 
 import (
 	"context"
@@ -6,7 +6,7 @@ import (
 	"github.com/mohammadVatandoost/ingbusiness/internal/savedmessages"
 )
 
-func (s *Store) Add(ctx context.Context, savedMessage *v1.SavedMessage,
+func (s *Service) Add(ctx context.Context, savedMessage *v1.SavedMessage,
 	userID int32) (savedmessages.SavedMessage, error) {
 	SavedMessage, err := s.savedMessagesDirectory.AddSavedMessage(ctx,
 		savedmessages.AddSavedMessageParams{
@@ -17,12 +17,12 @@ func (s *Store) Add(ctx context.Context, savedMessage *v1.SavedMessage,
 	return SavedMessage, err
 }
 
-func (s *Store) Delete(ctx context.Context, savedMessage *v1.SavedMessage) error {
+func (s *Service) Delete(ctx context.Context, savedMessage *v1.SavedMessage) error {
 	_, err := s.savedMessagesDirectory.DeleteSavedMessage(ctx, savedMessage.Id)
 	return err
 }
 
-func (s *Store) UpdateSavedMessageMessage(ctx context.Context, savedMessage *v1.SavedMessage) error {
+func (s *Service) UpdateSavedMessageMessage(ctx context.Context, savedMessage *v1.SavedMessage) error {
 	_, err := s.savedMessagesDirectory.UpdateSavedMessageMessage(ctx,
 		savedmessages.UpdateSavedMessageMessageParams{
 			ID:      savedMessage.Id,
@@ -32,7 +32,7 @@ func (s *Store) UpdateSavedMessageMessage(ctx context.Context, savedMessage *v1.
 }
 
 //ToDo: add pagination
-func (s *Store) GetSavedMessages(ctx context.Context) ([]savedmessages.SavedMessage, error) {
+func (s *Service) GetSavedMessages(ctx context.Context) ([]savedmessages.SavedMessage, error) {
 	SavedMessages, err := s.savedMessagesDirectory.GetSavedMessages(ctx)
 	return SavedMessages, err
 }

@@ -7,7 +7,7 @@ import (
 
 //ToDo: send message with image and sticker
 
-func (m *Messenger) SendTextMessage(token string, receiverID string, message string) error {
+func (s *Service) SendTextMessage(token string, receiverID string, message string) error {
 	bot, err := NewClient(token)
 	if err != nil {
 		return err

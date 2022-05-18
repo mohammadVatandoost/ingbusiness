@@ -6,14 +6,14 @@ import (
 	"github.com/mohammadVatandoost/ingbusiness/internal/users"
 )
 
-func (auth *Auth) SignUp(ctx context.Context, in *v1.SignUpRequest) (string, error) {
+func (s *Service) SignUp(ctx context.Context, in *v1.SignUpRequest) (string, error) {
 
 	pass, err := HashPassword(in.Password)
 	if err != nil {
 		return "", err
 	}
 
-	_, err = auth.usersDirectory.AddUser(ctx,
+	_, err = s.usersDirectory.AddUser(ctx,
 		users.AddUserParams{
 			Username: in.Username,
 			Phone:    in.PhoneNumber,

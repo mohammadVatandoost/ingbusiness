@@ -5,7 +5,7 @@ import (
 	"github.com/golang-jwt/jwt"
 )
 
-func Sign(msg Message) (string, error) {
+func Sign(msg Message, hmacSecret []byte) (string, error) {
 	data, _ := json.Marshal(msg)
 	mapData := make(jwt.MapClaims)
 	err := json.Unmarshal(data, &mapData)

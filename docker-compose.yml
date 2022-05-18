@@ -1,0 +1,37 @@
+version: '2.2'
+
+services:
+  crm:
+    container_name: crm
+    image: template
+    command: "./service serve"
+    network_mode: "host"
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      POSTGRES_HOST: "localhost"
+      POSTGRES_PORT: 5432
+      POSTGRES_USER: "crm"
+      POSTGRES_PASSWORD: "something"
+      PGPASSWORD: "something"
+      POSTGRES_DB: "crm_db"
+      POSTGRES_SSL: "disable"
+      POSTGRES_MIGRATIONVERSION: 1
+  db:
+    container_name: postgres
+    image: postgres:14.3
+    restart: always
+    environment:
+      POSTGRES_USER: crm
+      POSTGRES_PASSWORD: something
+      POSTGRES_DB: crm_db
+    healthcheck:
+      test: [ "CMD", "pg_isready" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - ./internal/database/initialize:/docker-entrypoint-initdb.d/
+
+

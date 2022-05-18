@@ -1,6 +1,7 @@
 package config
 
 import (
+	"github.com/mohammadVatandoost/ingbusiness/internal/services/authentication"
 	"strings"
 
 	"github.com/mohammadVatandoost/ingbusiness/internal/core/grpc"
@@ -22,6 +23,7 @@ type Config struct {
 	Postgres   database.Config
 	Metric     prometheus.Config
 	GoAdmin    goadmin.Config
+	Auth       authentication.Config
 }
 
 // LoadConfig loads the config from a file if specified, otherwise from the environment
@@ -46,6 +48,10 @@ func LoadConfig(cmd *cobra.Command) (*Config, error) {
 
 	viper.SetDefault("goadmin.port", 9027)
 	viper.SetDefault("goadmin.host", "localhost")
+
+	viper.SetDefault("auth.JwtSecret", "testKey")
+	viper.SetDefault("auth.GoogleKey", "GoogleKey")
+	viper.SetDefault("auth.GoogleSecret", "GoogleSecret")
 
 	// Read Config from ENV
 	viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))

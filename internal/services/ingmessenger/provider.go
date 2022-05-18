@@ -6,15 +6,15 @@ import (
 	"github.com/mohammadVatandoost/ingbusiness/internal/users"
 )
 
-type Messenger struct {
+type Service struct {
 	usersDirectory         users.Querier
 	ingAccountsDirectory   ingaccounts.Querier
 	savedMessagesDirectory savedmessages.Querier
 }
 
 func New(usersDirectory users.Querier, ingAccountsDirectory ingaccounts.Querier,
-	savedMessagesDirectory savedmessages.Querier) *Messenger {
-	return &Messenger{
+	savedMessagesDirectory savedmessages.Querier) *Service {
+	return &Service{
 		usersDirectory:         usersDirectory,
 		ingAccountsDirectory:   ingAccountsDirectory,
 		savedMessagesDirectory: savedMessagesDirectory,

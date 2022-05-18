@@ -3,7 +3,13 @@ package main
 import (
 	"context"
 	"fmt"
+	restAPI "github.com/mohammadVatandoost/ingbusiness/internal/core/rest"
 	"github.com/mohammadVatandoost/ingbusiness/internal/database"
+	"github.com/mohammadVatandoost/ingbusiness/internal/ingaccounts"
+	"github.com/mohammadVatandoost/ingbusiness/internal/savedmessages"
+	"github.com/mohammadVatandoost/ingbusiness/internal/services/authentication"
+	"github.com/mohammadVatandoost/ingbusiness/internal/services/frequentmessages"
+	"github.com/mohammadVatandoost/ingbusiness/internal/services/ingmessenger"
 	"github.com/mohammadVatandoost/ingbusiness/internal/users"
 	"github.com/mohammadVatandoost/ingbusiness/pkg/logger"
 	"sync"
@@ -50,12 +56,15 @@ func serve(cmd *cobra.Command, args []string) error {
 	}
 
 	usersDirectory := users.NewDirectory(log, db)
+	savedMessagesDirectory := savedmessages.NewDirectory(log, db)
+	ingAccountsDirectory := ingaccounts.NewDirectory(log, db)
 
-	//controlPlane := controller.New(experimentDirectory, serviceRouteDirectory,
-	//	cFlag, cCondition, cOverride, cService)
+	authenticationService := authentication.New(usersDirectory, conf.Auth)
+	ingMessengerService := ingmessenger.New(usersDirectory, ingAccountsDirectory, savedMessagesDirectory)
+	frequentMessagesService := frequentmessages.New(savedMessagesDirectory)
 
-	//grpcService := grpcAPI.New(experimentDirectory, serviceRouteDirectory, controlPlane, conf.GRPC)
-	//grpcServer := getGrpcServer(grpcService, []grpc.UnaryServerInterceptor{})
+	serverREST := restAPI.New(authenticationService, ingMessengerService, frequentMessagesService)
+	serverREST.Routes()
 
 	serverContext, serverCancel := cntext.WithSignalCancellation(
 		context.Background(),

@@ -4,12 +4,14 @@ import (
 	"github.com/mohammadVatandoost/ingbusiness/internal/users"
 )
 
-type Auth struct {
+type Service struct {
 	usersDirectory users.Querier
+	conf           Config
 }
 
-func New(usersDirectory users.Querier) *Auth {
-	return &Auth{
+func New(usersDirectory users.Querier, conf Config) *Service {
+	return &Service{
 		usersDirectory: usersDirectory,
+		conf:           conf,
 	}
 }
