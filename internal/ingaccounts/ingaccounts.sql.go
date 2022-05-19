@@ -12,29 +12,29 @@ const addIngAccount = `-- name: AddIngAccount :one
 INSERT INTO ing_accounts (
   name,
   token,
-  user_id
+  owner_id
 ) VALUES (
   $1,
   $2,
   $3
 )
-RETURNING id, name, token, user_id, create_time, update_time
+RETURNING id, name, token, owner_id, create_time, update_time
 `
 
 type AddIngAccountParams struct {
-	Name   string
-	Token  sql.NullString
-	UserID int32
+	Name    string
+	Token   sql.NullString
+	OwnerID int32
 }
 
 func (q *Queries) AddIngAccount(ctx context.Context, arg AddIngAccountParams) (IngAccount, error) {
-	row := q.db.QueryRowContext(ctx, addIngAccount, arg.Name, arg.Token, arg.UserID)
+	row := q.db.QueryRowContext(ctx, addIngAccount, arg.Name, arg.Token, arg.OwnerID)
 	var i IngAccount
 	err := row.Scan(
 		&i.ID,
 		&i.Name,
 		&i.Token,
-		&i.UserID,
+		&i.OwnerID,
 		&i.CreateTime,
 		&i.UpdateTime,
 	)
@@ -44,7 +44,7 @@ func (q *Queries) AddIngAccount(ctx context.Context, arg AddIngAccountParams) (I
 const deleteIngAccount = `-- name: DeleteIngAccount :one
 DELETE FROM ing_accounts
 WHERE id = $1
-RETURNING id, name, token, user_id, create_time, update_time
+RETURNING id, name, token, owner_id, create_time, update_time
 `
 
 func (q *Queries) DeleteIngAccount(ctx context.Context, id int32) (IngAccount, error) {
@@ -54,7 +54,7 @@ func (q *Queries) DeleteIngAccount(ctx context.Context, id int32) (IngAccount, e
 		&i.ID,
 		&i.Name,
 		&i.Token,
-		&i.UserID,
+		&i.OwnerID,
 		&i.CreateTime,
 		&i.UpdateTime,
 	)
@@ -62,7 +62,7 @@ func (q *Queries) DeleteIngAccount(ctx context.Context, id int32) (IngAccount, e
 }
 
 const getIngAccount = `-- name: GetIngAccount :one
-SELECT id, name, token, user_id, create_time, update_time FROM ing_accounts WHERE id = $1
+SELECT id, name, token, owner_id, create_time, update_time FROM ing_accounts WHERE id = $1
 `
 
 func (q *Queries) GetIngAccount(ctx context.Context, id int32) (IngAccount, error) {
@@ -72,7 +72,7 @@ func (q *Queries) GetIngAccount(ctx context.Context, id int32) (IngAccount, erro
 		&i.ID,
 		&i.Name,
 		&i.Token,
-		&i.UserID,
+		&i.OwnerID,
 		&i.CreateTime,
 		&i.UpdateTime,
 	)
@@ -80,17 +80,17 @@ func (q *Queries) GetIngAccount(ctx context.Context, id int32) (IngAccount, erro
 }
 
 const getIngAccountByUserID = `-- name: GetIngAccountByUserID :one
-SELECT id, name, token, user_id, create_time, update_time FROM ing_accounts WHERE user_id = $1
+SELECT id, name, token, owner_id, create_time, update_time FROM ing_accounts WHERE owner_id = $1
 `
 
-func (q *Queries) GetIngAccountByUserID(ctx context.Context, userID int32) (IngAccount, error) {
-	row := q.db.QueryRowContext(ctx, getIngAccountByUserID, userID)
+func (q *Queries) GetIngAccountByUserID(ctx context.Context, ownerID int32) (IngAccount, error) {
+	row := q.db.QueryRowContext(ctx, getIngAccountByUserID, ownerID)
 	var i IngAccount
 	err := row.Scan(
 		&i.ID,
 		&i.Name,
 		&i.Token,
-		&i.UserID,
+		&i.OwnerID,
 		&i.CreateTime,
 		&i.UpdateTime,
 	)
@@ -98,7 +98,7 @@ func (q *Queries) GetIngAccountByUserID(ctx context.Context, userID int32) (IngA
 }
 
 const getIngAccounts = `-- name: GetIngAccounts :many
-SELECT id, name, token, user_id, create_time, update_time FROM ing_accounts
+SELECT id, name, token, owner_id, create_time, update_time FROM ing_accounts
 `
 
 func (q *Queries) GetIngAccounts(ctx context.Context) ([]IngAccount, error) {
@@ -114,7 +114,7 @@ func (q *Queries) GetIngAccounts(ctx context.Context) ([]IngAccount, error) {
 			&i.ID,
 			&i.Name,
 			&i.Token,
-			&i.UserID,
+			&i.OwnerID,
 			&i.CreateTime,
 			&i.UpdateTime,
 		); err != nil {
@@ -134,7 +134,7 @@ func (q *Queries) GetIngAccounts(ctx context.Context) ([]IngAccount, error) {
 const updateIngAccountToken = `-- name: UpdateIngAccountToken :one
 UPDATE ing_accounts SET token = $2
 WHERE id = $1
-RETURNING id, name, token, user_id, create_time, update_time
+RETURNING id, name, token, owner_id, create_time, update_time
 `
 
 type UpdateIngAccountTokenParams struct {
@@ -149,7 +149,7 @@ func (q *Queries) UpdateIngAccountToken(ctx context.Context, arg UpdateIngAccoun
 		&i.ID,
 		&i.Name,
 		&i.Token,
-		&i.UserID,
+		&i.OwnerID,
 		&i.CreateTime,
 		&i.UpdateTime,
 	)

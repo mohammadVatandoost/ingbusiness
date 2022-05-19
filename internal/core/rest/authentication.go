@@ -2,10 +2,11 @@ package rest
 
 import (
 	"context"
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/markbates/goth/gothic"
 	v1 "github.com/mohammadVatandoost/ingbusiness/api/services/authentication/v1"
+	"github.com/mohammadVatandoost/ingbusiness/internal/services/authentication"
+	"github.com/mohammadVatandoost/ingbusiness/pkg/notification"
 	"net/http"
 	"time"
 )
@@ -29,7 +30,7 @@ func (s *Server) SignUp(c *gin.Context) {
 		ErrorResponse(c, err.Error())
 		return
 	}
-	APIResponse(c, http.StatusOK, []string{message}, nil, nil, "", nil)
+	APIResponse(c, http.StatusOK, []string{message}, nil, nil, AuthConfirm, nil)
 }
 
 func (s *Server) SignIn(c *gin.Context) {
@@ -90,14 +91,13 @@ func (s *Server) authMiddleware() gin.HandlerFunc {
 		user, err := s.authenticationService.ValidateJWT(token)
 		if err != nil {
 			s.logger.Warnf("can not ValidateJWT user token, err: %s \n", err.Error())
-			APIResponse(c, http.StatusBadRequest, nil, nil, ,
-				"", nil)
+			APIResponse(c, http.StatusBadRequest, nil, nil,
+				notification.BuildNotification(notification.MakeError("", authentication.ErrorNotAuthorized)),
+				AuthSignIn, nil)
+			c.Abort()
 			return
 		}
-		uuid := uuid.New()
-		c.Set("uuid", uuid)
-		fmt.Printf("The request with uuid %s is started \n", uuid)
+		c.Set(UserHeaderKey, user)
 		c.Next()
-		fmt.Printf("The request with uuid %s is served \n", uuid)
 	}
 }

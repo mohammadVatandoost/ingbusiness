@@ -2,7 +2,7 @@
 INSERT INTO ing_accounts (
   name,
   token,
-  user_id
+  owner_id
 ) VALUES (
   $1,
   $2,
@@ -17,7 +17,7 @@ SELECT * FROM ing_accounts;
 SELECT * FROM ing_accounts WHERE id = $1;
 
 -- name: GetIngAccountByUserID :one
-SELECT * FROM ing_accounts WHERE user_id = $1;
+SELECT * FROM ing_accounts WHERE owner_id = $1;
 
 -- name: UpdateIngAccountToken :one
 UPDATE ing_accounts SET token = $2

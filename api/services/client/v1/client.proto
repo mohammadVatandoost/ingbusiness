@@ -1,5 +1,11 @@
 syntax = "proto3";
 
 option go_package = "github.com/mohammadVatandoost/ingbusiness/api/services/client/v1;client";
+import "api/services/notification/v1/notification.proto";
 
-
+message Response {
+  repeated string messages = 1;
+  repeated Notification notifications = 2;
+  string redirect = 3;
+  repeated string errors = 4;
+}

@@ -1,6 +1,10 @@
 package rest
 
 import (
+	client "github.com/mohammadVatandoost/ingbusiness/api/services/client/v1"
+	v1 "github.com/mohammadVatandoost/ingbusiness/api/services/notification/v1"
+	"github.com/sirupsen/logrus"
+	"google.golang.org/protobuf/proto"
 	"net/http"
 	"strconv"
 
@@ -10,7 +14,6 @@ import (
 const (
 	AuthTokenHeaderKey = "X-JWT-TOKEN"
 	UserIDHeaderKey    = "X-USER-ID"
-	UserDashboardPath  = "/dashboard"
 )
 
 func ErrorResponse(c *gin.Context, message string) {
@@ -28,12 +31,24 @@ func SetUserID(c *gin.Context, id int32) {
 }
 
 func APIResponse(c *gin.Context, status int, message []string, payload interface{},
-	notifications interface{}, redirectURL string, err []string) {
-	c.JSON(status, gin.H{
-		"messages":      message,
-		"notifications": notifications,
-		"payload":       payload,
-		"redirect":      redirectURL,
-		"errors":        err,
-	})
+	notifications []*v1.Notification, redirectURL string, errors []string) {
+	res := client.Response{
+		Notifications: notifications,
+		Redirect:      redirectURL,
+		Errors:        errors,
+		Messages:      message,
+	}
+	bytes, err := proto.Marshal(&res)
+	if err != nil {
+		logrus.Errorf("can not convert client response message to json, res: %s, err: %s \n",
+			res.String(), err.Error())
+	}
+	c.String(status, string(bytes))
+	//c.JSON(status, gin.H{
+	//	"messages":      message,
+	//	"notifications": notifications,
+	//	"payload":       payload,
+	//	"redirect":      redirectURL,
+	//	"errors":        err,
+	//})
 }

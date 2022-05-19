@@ -71,7 +71,7 @@ func (c *Controller) ServeAdmin(conf Config, postgresConf database.Config, r *gi
 	template.AddComp(chartjs.NewChart())
 	//eng.AddAdapter()
 	if err := eng.AddConfig(&cfg).
-		AddGenerators(users.Generators).
+		//AddGenerators(users.Generators).
 		AddGenerator("external", GetExternalTable).
 		Use(r); err != nil {
 		panic(err)

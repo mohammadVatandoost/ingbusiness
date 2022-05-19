@@ -9,7 +9,3 @@ message Notification {
   string message = 4;
 }
 
-message Notifications {
-  repeated Notification notifications = 1;
-}
-

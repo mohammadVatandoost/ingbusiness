@@ -90,7 +90,7 @@ func (d *Directory) GetUserByUserName(ctx context.Context,
 	return user, nil
 }
 
-func (d *Directory) DeleteUser(ctx context.Context, id int32) (Experiment, error) {
+func (d *Directory) DeleteUser(ctx context.Context, id int32) (User, error) {
 	user, err := d.querier.DeleteUser(ctx, id)
 	if err != nil {
 		return user, status.Errorf(codes.Internal, "unexpected error DeleteUser: %s", err.Error())

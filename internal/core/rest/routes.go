@@ -1,10 +1,21 @@
 package rest
 
+const (
+	versionPrefix = "/v1"
+	authPrefix    = "/auth"
+	userPrefix    = "/user"
+
+	UserDashboardPath = versionPrefix + userPrefix + "/dashboard"
+
+	AuthSignIn  = versionPrefix + authPrefix + "/signIn"
+	AuthConfirm = versionPrefix + authPrefix + "/confirm"
+)
+
 func (s *Server) Routes() {
 	router := s.Engine
-	groupV1 := router.Group("/v1")
+	groupV1 := router.Group(versionPrefix)
 
-	authenticationGroup := groupV1.Group("/auth")
+	authenticationGroup := groupV1.Group(authPrefix)
 
 	// authentication
 	authenticationGroup.POST("/signUp", s.SignUp)
@@ -12,7 +23,7 @@ func (s *Server) Routes() {
 	authenticationGroup.GET("/{provider}/callback", s.OAuth2CallBack)
 	authenticationGroup.GET("/{provider}", s.OAuth2)
 
-	userGroup := groupV1.Group("/user")
+	userGroup := groupV1.Group(userPrefix)
 	userGroup.POST("/getDirectMessages", s.GetDirectMessages)
 	userGroup.POST("/sendDirectMessage", s.SendDirectMessage)
 }
