@@ -2,7 +2,6 @@ package rest
 
 import (
 	"context"
-	"net/http"
 	"strconv"
 	"time"
 
@@ -20,7 +19,6 @@ func (s *Server) GetDirectMessages(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	c.String(http.StatusOK, "Experiment %s is Disabled", experimentID)
 }
 
 func (s *Server) SendDirectMessage(c *gin.Context) {

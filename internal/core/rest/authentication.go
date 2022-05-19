@@ -1,15 +1,59 @@
 package rest
 
 import (
+	"context"
 	"github.com/gin-gonic/gin"
 	"github.com/markbates/goth/gothic"
+	v1 "github.com/mohammadVatandoost/ingbusiness/api/services/authentication/v1"
+	"net/http"
+	"time"
 )
 
 func (s *Server) SignUp(c *gin.Context) {
+	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(s.conf.TimeOut)*time.Second)
+	defer cancel()
 
+	var data v1.SignUpRequest
+
+	err := c.BindJSON(&data)
+	if err != nil {
+		s.logger.Errorf("can not get json data for SignUp, err: %s \n", err.Error())
+		ErrorResponse(c, err.Error())
+		return
+	}
+
+	message, err := s.authenticationService.SignUp(ctx, &data)
+	if err != nil {
+		s.logger.Errorf("can not SignUp, userData: %v, err: %s \n", data.String(), err.Error())
+		ErrorResponse(c, err.Error())
+		return
+	}
+	APIResponse(c, http.StatusOK, []string{message}, nil, nil)
 }
 
 func (s *Server) SignIn(c *gin.Context) {
+	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(s.conf.TimeOut)*time.Second)
+	defer cancel()
+
+	var data v1.SignInRequest
+
+	err := c.BindJSON(&data)
+	if err != nil {
+		s.logger.Errorf("can not get json data for SignIn, err: %s \n", err.Error())
+		ErrorResponse(c, err.Error())
+		return
+	}
+
+	res, err := s.authenticationService.SignIn(ctx, &data)
+	if err != nil {
+		s.logger.Errorf("can not SignIn, userData: %v, err: %s \n", data.String(), err.Error())
+		ErrorResponse(c, err.Error())
+		return
+	}
+
+	SetAuthToken(c, res.Token)
+	SetUserID(c, res.UserID)
+	c.Redirect(http.StatusOK, UserDashboardPath)
 
 }
 
@@ -34,5 +78,7 @@ func (s *Server) OAuth2CallBack(c *gin.Context) {
 		ErrorResponse(c, err.Error())
 		return
 	}
-	// ToDo set to auth token
+	SetAuthToken(c, res.Token)
+	SetUserID(c, res.UserID)
+	c.Redirect(http.StatusOK, UserDashboardPath)
 }
