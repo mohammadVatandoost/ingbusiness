@@ -12,8 +12,6 @@ MOCK_PACKAGES = \
 MOCKED_FILES = $(shell find . -name DOES_NOT_EXIST_FILE $(patsubst %,-or -path "./%/mocks/*.go",$(MOCK_PACKAGES)))
 MOCKED_FOLDERS = $(patsubst %,%/mocks,$(MOCK_PACKAGES))
 
-
-
 SQL_MODELS= \
 	internal/users \
 	internal/savedmessages \

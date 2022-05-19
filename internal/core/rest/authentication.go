@@ -29,7 +29,7 @@ func (s *Server) SignUp(c *gin.Context) {
 		ErrorResponse(c, err.Error())
 		return
 	}
-	APIResponse(c, http.StatusOK, []string{message}, nil, nil)
+	APIResponse(c, http.StatusOK, []string{message}, nil, nil, "", nil)
 }
 
 func (s *Server) SignIn(c *gin.Context) {
@@ -90,7 +90,9 @@ func (s *Server) authMiddleware() gin.HandlerFunc {
 		user, err := s.authenticationService.ValidateJWT(token)
 		if err != nil {
 			s.logger.Warnf("can not ValidateJWT user token, err: %s \n", err.Error())
-			ErrorResponse(c, "you are not authorize, please login")
+			APIResponse(c, http.StatusBadRequest, nil, nil, ,
+				"", nil)
+			return
 		}
 		uuid := uuid.New()
 		c.Set("uuid", uuid)

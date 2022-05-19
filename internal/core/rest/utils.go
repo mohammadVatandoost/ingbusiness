@@ -15,9 +15,7 @@ const (
 
 func ErrorResponse(c *gin.Context, message string) {
 	c.JSON(http.StatusBadRequest, gin.H{
-		"errors": gin.H{
-			"message": message,
-		},
+		"error": message,
 	})
 }
 

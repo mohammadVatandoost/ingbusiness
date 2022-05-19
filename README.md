@@ -2,8 +2,11 @@
 ## ToDo:
 
 - Get Direct messages
-- Add End to End testing // this helps to document
+- Add Client Proto messages
+- Add end-to-end testing // this helps to document
 - Add Prometheus exporter
+- Add Facebook login
 
 ## Done:
 - [x] Add Authentication service
+- [x] Add Google Login

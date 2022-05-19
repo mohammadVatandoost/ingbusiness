@@ -1,0 +1,5 @@
+syntax = "proto3";
+
+option go_package = "github.com/mohammadVatandoost/ingbusiness/api/services/client/v1;client";
+
+

@@ -2,10 +2,14 @@ syntax = "proto3";
 
 option go_package = "github.com/mohammadVatandoost/ingbusiness/api/services/notification/v1;notification";
 
-
 message Notification {
   string icon = 1;
   string color = 2;
   string title = 3;
   string message = 4;
 }
+
+message Notifications {
+  repeated Notification notifications = 1;
+}
+
