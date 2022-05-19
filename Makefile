@@ -16,6 +16,8 @@ SQL_MODELS= \
 	internal/users \
 	internal/savedmessages \
 	internal/organization \
+	internal/access \
+	internal/role \
 	internal/ingaccounts
 
 SQL_FOLDERS = $(patsubst %,%,$(SQL_MODELS))
