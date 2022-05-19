@@ -26,13 +26,16 @@ func SetAuthToken(c *gin.Context, token string) {
 }
 
 func SetUserID(c *gin.Context, id int32) {
-	c.Header(UserIDHeaderKey, strconv.Itoa(id))
+	c.Header(UserIDHeaderKey, strconv.Itoa(int(id)))
 }
 
-func APIResponse(c *gin.Context, status int, message []string, payload interface{}, err []string) {
+func APIResponse(c *gin.Context, status int, message []string, payload interface{},
+	notifications interface{}, redirectURL string, err []string) {
 	c.JSON(status, gin.H{
-		"messages": message,
-		"errors":   err,
-		"payload":  payload,
+		"messages":      message,
+		"notifications": notifications,
+		"payload":       payload,
+		"redirect":      redirectURL,
+		"errors":        err,
 	})
 }

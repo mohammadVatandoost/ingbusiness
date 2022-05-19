@@ -24,6 +24,7 @@ SQL_FOLDERS = $(patsubst %,%,$(SQL_MODELS))
 PROTO_PACKAGES= \
 	api/services/authentication/v1 \
 	api/services/savedmessages/v1 \
+	api/services/notification/v1 \
 	api/services/ingmessenger/v1
 
 PROTO_FOLDERS = $(patsubst %,%,$(PROTO_PACKAGES))

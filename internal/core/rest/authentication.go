@@ -2,6 +2,7 @@ package rest
 
 import (
 	"context"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/markbates/goth/gothic"
 	v1 "github.com/mohammadVatandoost/ingbusiness/api/services/authentication/v1"
@@ -81,4 +82,20 @@ func (s *Server) OAuth2CallBack(c *gin.Context) {
 	SetAuthToken(c, res.Token)
 	SetUserID(c, res.UserID)
 	c.Redirect(http.StatusOK, UserDashboardPath)
+}
+
+func (s *Server) authMiddleware() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		token := c.GetHeader(AuthTokenHeaderKey)
+		user, err := s.authenticationService.ValidateJWT(token)
+		if err != nil {
+			s.logger.Warnf("can not ValidateJWT user token, err: %s \n", err.Error())
+			ErrorResponse(c, "you are not authorize, please login")
+		}
+		uuid := uuid.New()
+		c.Set("uuid", uuid)
+		fmt.Printf("The request with uuid %s is started \n", uuid)
+		c.Next()
+		fmt.Printf("The request with uuid %s is served \n", uuid)
+	}
 }
