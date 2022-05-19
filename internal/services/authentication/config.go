@@ -1,7 +1,9 @@
 package authentication
 
 type Config struct {
-	jwtSecret    string
-	googleKey    string
-	googleSecret string
+	JwtSecret         string
+	GoogleKey         string
+	GoogleSecret      string
+	GoogleCallbackUrl string
+	EnableSSL         bool
 }

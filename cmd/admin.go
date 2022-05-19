@@ -4,6 +4,11 @@ import (
 	"context"
 	"fmt"
 	"github.com/mohammadVatandoost/ingbusiness/internal/database"
+	"github.com/mohammadVatandoost/ingbusiness/internal/ingaccounts"
+	"github.com/mohammadVatandoost/ingbusiness/internal/savedmessages"
+	"github.com/mohammadVatandoost/ingbusiness/internal/services/authentication"
+	"github.com/mohammadVatandoost/ingbusiness/internal/services/frequentmessages"
+	"github.com/mohammadVatandoost/ingbusiness/internal/services/ingmessenger"
 	"github.com/mohammadVatandoost/ingbusiness/internal/users"
 	"github.com/mohammadVatandoost/ingbusiness/pkg/logger"
 	"sync"
@@ -45,11 +50,16 @@ func serveAdmin(cmd *cobra.Command, args []string) error {
 	if err != nil {
 		return fmt.Errorf("failed to create DB connection: %v", err.Error())
 	}
+
 	usersDirectory := users.NewDirectory(log, db)
+	savedMessagesDirectory := savedmessages.NewDirectory(log, db)
+	ingAccountsDirectory := ingaccounts.NewDirectory(log, db)
 
-	//controlPlane := controller.New(experimentDirectory, serviceRouteDirectory, cFlag, cCondition, cOverride, cService)
+	authenticationService := authentication.New(log, usersDirectory, conf.Auth)
+	ingMessengerService := ingmessenger.New(usersDirectory, ingAccountsDirectory, savedMessagesDirectory)
+	frequentMessagesService := frequentmessages.New(savedMessagesDirectory)
 
-	serverREST := restAPI.New()
+	serverREST := restAPI.New(log, authenticationService, ingMessengerService, frequentMessagesService)
 	serverREST.Routes()
 
 	goAdmin := goadmin.NewController()

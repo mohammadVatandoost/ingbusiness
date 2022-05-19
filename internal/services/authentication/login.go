@@ -40,7 +40,7 @@ func (s *Service) SignIn(ctx context.Context, in *v1.SignInRequest) (*v1.SignInR
 		Email:     user.Email,
 		UserName:  user.Name,
 		Timestamp: time.Now().Unix(),
-	})
+	}, s.jwtSecret)
 
 	if err != nil {
 		return nil, err

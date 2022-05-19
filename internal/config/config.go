@@ -1,6 +1,7 @@
 package config
 
 import (
+	"github.com/mohammadVatandoost/ingbusiness/internal/core/rest"
 	"github.com/mohammadVatandoost/ingbusiness/internal/services/authentication"
 	"strings"
 
@@ -24,6 +25,7 @@ type Config struct {
 	Metric     prometheus.Config
 	GoAdmin    goadmin.Config
 	Auth       authentication.Config
+	Rest       rest.Config
 }
 
 // LoadConfig loads the config from a file if specified, otherwise from the environment
@@ -49,9 +51,15 @@ func LoadConfig(cmd *cobra.Command) (*Config, error) {
 	viper.SetDefault("goadmin.port", 9027)
 	viper.SetDefault("goadmin.host", "localhost")
 
+	viper.SetDefault("goadmin.port", 9027)
+	viper.SetDefault("goadmin.host", "localhost")
+
 	viper.SetDefault("auth.JwtSecret", "testKey")
 	viper.SetDefault("auth.GoogleKey", "GoogleKey")
 	viper.SetDefault("auth.GoogleSecret", "GoogleSecret")
+	viper.SetDefault("auth.GoogleCallbackUrl", "http://localhost:3000/auth/google/callback")
+
+	viper.SetDefault("auth.EnableSSL", false)
 
 	// Read Config from ENV
 	viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))

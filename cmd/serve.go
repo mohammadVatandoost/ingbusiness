@@ -14,6 +14,7 @@ import (
 	"github.com/mohammadVatandoost/ingbusiness/pkg/logger"
 	"sync"
 	"syscall"
+	"time"
 
 	cntext "github.com/mohammadVatandoost/ingbusiness/pkg/context"
 	"github.com/sirupsen/logrus"
@@ -59,11 +60,11 @@ func serve(cmd *cobra.Command, args []string) error {
 	savedMessagesDirectory := savedmessages.NewDirectory(log, db)
 	ingAccountsDirectory := ingaccounts.NewDirectory(log, db)
 
-	authenticationService := authentication.New(usersDirectory, conf.Auth)
+	authenticationService := authentication.New(log, usersDirectory, conf.Auth)
 	ingMessengerService := ingmessenger.New(usersDirectory, ingAccountsDirectory, savedMessagesDirectory)
 	frequentMessagesService := frequentmessages.New(savedMessagesDirectory)
 
-	serverREST := restAPI.New(authenticationService, ingMessengerService, frequentMessagesService)
+	serverREST := restAPI.New(log, authenticationService, ingMessengerService, frequentMessagesService)
 	serverREST.Routes()
 
 	serverContext, serverCancel := cntext.WithSignalCancellation(
@@ -75,15 +76,18 @@ func serve(cmd *cobra.Command, args []string) error {
 	var serverWaitGroup sync.WaitGroup
 	serverWaitGroup.Add(1)
 
-	//go func() {
-	//	defer serverWaitGroup.Done()
-	//	startGrpcServerOrPanic(conf.GRPC.ListenPort, grpcServer)
-	//}()
+	go func() {
+		defer serverWaitGroup.Done()
+		serverREST.Run()
+		//startGrpcServerOrPanic(conf.GRPC.ListenPort, grpcServer)
+	}()
 
 	<-serverContext.Done()
-	//go func() {
-	//	grpcServer.GracefulStop()
-	//}()
+	go func() {
+		ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+		defer cancel()
+		serverREST.Shutdown(ctx)
+	}()
 
 	serverWaitGroup.Wait()
 	return nil

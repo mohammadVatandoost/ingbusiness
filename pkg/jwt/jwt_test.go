@@ -14,12 +14,14 @@ func TestJWTSignParse(t *testing.T) {
 		Timestamp: time.Now().Unix(),
 	}
 
-	signed, err := Sign(mes)
+	secret := []byte("test")
+
+	signed, err := Sign(mes, secret)
 	if err != nil {
 		t.Fatalf("Failed to sign message: %s", err.Error())
 	}
 
-	parsedMessage, err := Parse(signed)
+	parsedMessage, err := Parse(signed, secret)
 	if err != nil {
 		t.Fatalf("Failed to Parse message: %s", err.Error())
 	}
