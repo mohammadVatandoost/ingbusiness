@@ -60,6 +60,83 @@ func (q *Queries) DeleteAccess(ctx context.Context, id int32) (Access, error) {
 	return i, err
 }
 
+const deleteAccessByOrganizationID = `-- name: DeleteAccessByOrganizationID :many
+DELETE FROM access
+WHERE organization_id = $1
+RETURNING id, organization_id, user_id, role_id, create_time, update_time
+`
+
+func (q *Queries) DeleteAccessByOrganizationID(ctx context.Context, organizationID int32) ([]Access, error) {
+	rows, err := q.db.QueryContext(ctx, deleteAccessByOrganizationID, organizationID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Access
+	for rows.Next() {
+		var i Access
+		if err := rows.Scan(
+			&i.ID,
+			&i.OrganizationID,
+			&i.UserID,
+			&i.RoleID,
+			&i.CreateTime,
+			&i.UpdateTime,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const deleteAccessByOrganizationIDAndUserID = `-- name: DeleteAccessByOrganizationIDAndUserID :many
+DELETE FROM access
+WHERE organization_id = $1 and user_id = $2
+RETURNING id, organization_id, user_id, role_id, create_time, update_time
+`
+
+type DeleteAccessByOrganizationIDAndUserIDParams struct {
+	OrganizationID int32
+	UserID         int32
+}
+
+func (q *Queries) DeleteAccessByOrganizationIDAndUserID(ctx context.Context, arg DeleteAccessByOrganizationIDAndUserIDParams) ([]Access, error) {
+	rows, err := q.db.QueryContext(ctx, deleteAccessByOrganizationIDAndUserID, arg.OrganizationID, arg.UserID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Access
+	for rows.Next() {
+		var i Access
+		if err := rows.Scan(
+			&i.ID,
+			&i.OrganizationID,
+			&i.UserID,
+			&i.RoleID,
+			&i.CreateTime,
+			&i.UpdateTime,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getAccess = `-- name: GetAccess :one
 SELECT id, organization_id, user_id, role_id, create_time, update_time FROM access WHERE id = $1
 `

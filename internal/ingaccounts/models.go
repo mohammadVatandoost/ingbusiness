@@ -8,10 +8,11 @@ import (
 )
 
 type IngAccount struct {
-	ID         int32
-	Name       string
-	Token      sql.NullString
-	OwnerID    int32
-	CreateTime time.Time
-	UpdateTime time.Time
+	ID             int32
+	Name           string
+	Token          sql.NullString
+	OrganizationID int32
+	CreatorID      int32
+	CreateTime     time.Time
+	UpdateTime     time.Time
 }

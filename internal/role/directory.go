@@ -1,4 +1,4 @@
-package organization
+package roles
 
 import (
 	"context"
@@ -29,51 +29,51 @@ func (d *Directory) Close() error {
 	return d.db.Close()
 }
 
-func (d *Directory) AddOrganization(ctx context.Context, arg AddOrganizationParams) (Organization, error) {
-	organization, err := d.querier.AddOrganization(ctx, arg)
+func (d *Directory) AddRole(ctx context.Context, arg AddRoleParams) (Role, error) {
+	role, err := d.querier.AddRole(ctx, arg)
 	if err != nil {
-		return organization, status.Errorf(codes.Internal,
-			"unexpected error AddOrganization: %s", err.Error())
+		return role, status.Errorf(codes.Internal,
+			"unexpected error AddRole: %s", err.Error())
 	}
-	return organization, nil
+	return role, nil
 }
 
-func (d *Directory) GetOrganization(ctx context.Context, id int32) (Organization, error) {
-	organization, err := d.querier.GetOrganization(ctx, id)
+func (d *Directory) GetRole(ctx context.Context, id int32) (Role, error) {
+	role, err := d.querier.GetRole(ctx, id)
 	if err != nil {
-		return organization, status.Errorf(codes.Internal, "unexpected error GetOrganization: %s", err.Error())
+		return role, status.Errorf(codes.Internal, "unexpected error GetRole: %s", err.Error())
 	}
-	return organization, nil
+	return role, nil
 }
 
-func (d *Directory) GetOrganizations(ctx context.Context) ([]Organization, error) {
-	organizations, err := d.querier.GetOrganizations(ctx)
+func (d *Directory) GetRoles(ctx context.Context) ([]Role, error) {
+	roles, err := d.querier.GetRoles(ctx)
 	if err != nil {
-		return nil, status.Errorf(codes.Internal, "unexpected error GetOrganizations: %s", err.Error())
+		return nil, status.Errorf(codes.Internal, "unexpected error GetRoles: %s", err.Error())
 	}
-	return organizations, nil
+	return roles, nil
 }
 
-func (d *Directory) GetOrganizationByOwnerID(ctx context.Context, ownerID int32) ([]Organization, error) {
-	organizations, err := d.querier.GetOrganizationByOwnerID(ctx, ownerID)
+func (d *Directory) GetRoleByOrganizationID(ctx context.Context, ownerID int32) ([]Role, error) {
+	roles, err := d.querier.GetRoleByOrganizationID(ctx, ownerID)
 	if err != nil {
-		return nil, status.Errorf(codes.Internal, "unexpected error GetOrganizationByOwnerID: %s", err.Error())
+		return nil, status.Errorf(codes.Internal, "unexpected error GetRoleByOrganizationID: %s", err.Error())
 	}
-	return organizations, nil
+	return roles, nil
 }
 
-func (d *Directory) DeleteOrganization(ctx context.Context, id int32) (Organization, error) {
-	savedMessage, err := d.querier.DeleteOrganization(ctx, id)
+func (d *Directory) GetRoleByCreatorID(ctx context.Context, creatorID int32) ([]Role, error) {
+	roles, err := d.querier.GetRoleByCreatorID(ctx, creatorID)
 	if err != nil {
-		return savedMessage, status.Errorf(codes.Internal, "unexpected error DeleteOrganization: %s", err.Error())
+		return nil, status.Errorf(codes.Internal, "unexpected error GetRoleByCreatorID: %s", err.Error())
 	}
-	return savedMessage, nil
+	return roles, nil
 }
 
-func (d *Directory) UpdateOrganization(ctx context.Context, arg UpdateOrganizationParams) (Organization, error) {
-	savedMessage, err := d.querier.UpdateOrganization(ctx, arg)
+func (d *Directory) DeleteRole(ctx context.Context, id int32) (Role, error) {
+	role, err := d.querier.DeleteRole(ctx, id)
 	if err != nil {
-		return savedMessage, status.Errorf(codes.Internal, "unexpected error UpdateOrganization: %s", err.Error())
+		return role, status.Errorf(codes.Internal, "unexpected error DeleteRole: %s", err.Error())
 	}
-	return savedMessage, nil
+	return role, nil
 }

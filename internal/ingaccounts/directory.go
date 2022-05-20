@@ -62,6 +62,15 @@ func (d *Directory) GetIngAccountByUserID(ctx context.Context, userID int32) (In
 	return ingAccount, nil
 }
 
+func (d *Directory) GetIngAccountByOrganizationID(ctx context.Context, organizationID int32) (IngAccount, error) {
+	ingAccount, err := d.querier.GetIngAccountByOrganizationID(ctx, organizationID)
+	if err != nil {
+		return ingAccount, status.Errorf(codes.Internal, "unexpected error GetIngAccountByOrganizationID: %s",
+			err.Error())
+	}
+	return ingAccount, nil
+}
+
 func (d *Directory) UpdateIngAccountToken(ctx context.Context, arg UpdateIngAccountTokenParams) (IngAccount, error) {
 	ingAccount, err := d.querier.UpdateIngAccountToken(ctx, arg)
 	if err != nil {

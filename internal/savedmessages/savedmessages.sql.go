@@ -10,29 +10,29 @@ import (
 const addSavedMessage = `-- name: AddSavedMessage :one
 INSERT INTO saved_messages (
   message,
-  ing_account_id,
+  organization_id,
   writer_id
 ) VALUES (
   $1,
   $2,
   $3
 )
-RETURNING id, message, ing_account_id, writer_id, create_time, update_time
+RETURNING id, message, organization_id, writer_id, create_time, update_time
 `
 
 type AddSavedMessageParams struct {
-	Message      string
-	IngAccountID int32
-	WriterID     int32
+	Message        string
+	OrganizationID int32
+	WriterID       int32
 }
 
 func (q *Queries) AddSavedMessage(ctx context.Context, arg AddSavedMessageParams) (SavedMessage, error) {
-	row := q.db.QueryRowContext(ctx, addSavedMessage, arg.Message, arg.IngAccountID, arg.WriterID)
+	row := q.db.QueryRowContext(ctx, addSavedMessage, arg.Message, arg.OrganizationID, arg.WriterID)
 	var i SavedMessage
 	err := row.Scan(
 		&i.ID,
 		&i.Message,
-		&i.IngAccountID,
+		&i.OrganizationID,
 		&i.WriterID,
 		&i.CreateTime,
 		&i.UpdateTime,
@@ -43,7 +43,7 @@ func (q *Queries) AddSavedMessage(ctx context.Context, arg AddSavedMessageParams
 const deleteSavedMessage = `-- name: DeleteSavedMessage :one
 DELETE FROM saved_messages
 WHERE id = $1
-RETURNING id, message, ing_account_id, writer_id, create_time, update_time
+RETURNING id, message, organization_id, writer_id, create_time, update_time
 `
 
 func (q *Queries) DeleteSavedMessage(ctx context.Context, id int32) (SavedMessage, error) {
@@ -52,7 +52,7 @@ func (q *Queries) DeleteSavedMessage(ctx context.Context, id int32) (SavedMessag
 	err := row.Scan(
 		&i.ID,
 		&i.Message,
-		&i.IngAccountID,
+		&i.OrganizationID,
 		&i.WriterID,
 		&i.CreateTime,
 		&i.UpdateTime,
@@ -61,7 +61,7 @@ func (q *Queries) DeleteSavedMessage(ctx context.Context, id int32) (SavedMessag
 }
 
 const getSavedMessage = `-- name: GetSavedMessage :one
-SELECT id, message, ing_account_id, writer_id, create_time, update_time FROM saved_messages WHERE id = $1
+SELECT id, message, organization_id, writer_id, create_time, update_time FROM saved_messages WHERE id = $1
 `
 
 func (q *Queries) GetSavedMessage(ctx context.Context, id int32) (SavedMessage, error) {
@@ -70,7 +70,7 @@ func (q *Queries) GetSavedMessage(ctx context.Context, id int32) (SavedMessage, 
 	err := row.Scan(
 		&i.ID,
 		&i.Message,
-		&i.IngAccountID,
+		&i.OrganizationID,
 		&i.WriterID,
 		&i.CreateTime,
 		&i.UpdateTime,
@@ -78,12 +78,12 @@ func (q *Queries) GetSavedMessage(ctx context.Context, id int32) (SavedMessage, 
 	return i, err
 }
 
-const getSavedMessageByIngAccountID = `-- name: GetSavedMessageByIngAccountID :many
-SELECT id, message, ing_account_id, writer_id, create_time, update_time FROM saved_messages WHERE ing_account_id = $1
+const getSavedMessageByOrganizationID = `-- name: GetSavedMessageByOrganizationID :many
+SELECT id, message, organization_id, writer_id, create_time, update_time FROM saved_messages WHERE organization_id = $1
 `
 
-func (q *Queries) GetSavedMessageByIngAccountID(ctx context.Context, ingAccountID int32) ([]SavedMessage, error) {
-	rows, err := q.db.QueryContext(ctx, getSavedMessageByIngAccountID, ingAccountID)
+func (q *Queries) GetSavedMessageByOrganizationID(ctx context.Context, organizationID int32) ([]SavedMessage, error) {
+	rows, err := q.db.QueryContext(ctx, getSavedMessageByOrganizationID, organizationID)
 	if err != nil {
 		return nil, err
 	}
@@ -94,7 +94,7 @@ func (q *Queries) GetSavedMessageByIngAccountID(ctx context.Context, ingAccountI
 		if err := rows.Scan(
 			&i.ID,
 			&i.Message,
-			&i.IngAccountID,
+			&i.OrganizationID,
 			&i.WriterID,
 			&i.CreateTime,
 			&i.UpdateTime,
@@ -113,7 +113,7 @@ func (q *Queries) GetSavedMessageByIngAccountID(ctx context.Context, ingAccountI
 }
 
 const getSavedMessageByWriterID = `-- name: GetSavedMessageByWriterID :many
-SELECT id, message, ing_account_id, writer_id, create_time, update_time FROM saved_messages WHERE writer_id = $1
+SELECT id, message, organization_id, writer_id, create_time, update_time FROM saved_messages WHERE writer_id = $1
 `
 
 func (q *Queries) GetSavedMessageByWriterID(ctx context.Context, writerID int32) ([]SavedMessage, error) {
@@ -128,7 +128,7 @@ func (q *Queries) GetSavedMessageByWriterID(ctx context.Context, writerID int32)
 		if err := rows.Scan(
 			&i.ID,
 			&i.Message,
-			&i.IngAccountID,
+			&i.OrganizationID,
 			&i.WriterID,
 			&i.CreateTime,
 			&i.UpdateTime,
@@ -147,7 +147,7 @@ func (q *Queries) GetSavedMessageByWriterID(ctx context.Context, writerID int32)
 }
 
 const getSavedMessages = `-- name: GetSavedMessages :many
-SELECT id, message, ing_account_id, writer_id, create_time, update_time FROM saved_messages
+SELECT id, message, organization_id, writer_id, create_time, update_time FROM saved_messages
 `
 
 func (q *Queries) GetSavedMessages(ctx context.Context) ([]SavedMessage, error) {
@@ -162,7 +162,7 @@ func (q *Queries) GetSavedMessages(ctx context.Context) ([]SavedMessage, error) 
 		if err := rows.Scan(
 			&i.ID,
 			&i.Message,
-			&i.IngAccountID,
+			&i.OrganizationID,
 			&i.WriterID,
 			&i.CreateTime,
 			&i.UpdateTime,
@@ -183,7 +183,7 @@ func (q *Queries) GetSavedMessages(ctx context.Context) ([]SavedMessage, error) 
 const updateSavedMessageMessage = `-- name: UpdateSavedMessageMessage :one
 UPDATE saved_messages SET message = $2
 WHERE id = $1
-RETURNING id, message, ing_account_id, writer_id, create_time, update_time
+RETURNING id, message, organization_id, writer_id, create_time, update_time
 `
 
 type UpdateSavedMessageMessageParams struct {
@@ -197,7 +197,7 @@ func (q *Queries) UpdateSavedMessageMessage(ctx context.Context, arg UpdateSaved
 	err := row.Scan(
 		&i.ID,
 		&i.Message,
-		&i.IngAccountID,
+		&i.OrganizationID,
 		&i.WriterID,
 		&i.CreateTime,
 		&i.UpdateTime,

@@ -6,6 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/mohammadVatandoost/ingbusiness/internal/services/authentication"
 	"github.com/mohammadVatandoost/ingbusiness/internal/services/frequentmessages"
+	"github.com/mohammadVatandoost/ingbusiness/internal/services/iam"
 	"github.com/mohammadVatandoost/ingbusiness/internal/services/ingmessenger"
 	"github.com/sirupsen/logrus"
 	"net/http"
@@ -16,6 +17,7 @@ type Server struct {
 	authenticationService   *authentication.Service
 	messengerService        *ingmessenger.Service
 	frequentMessagesService *frequentmessages.Service
+	iamService              *iam.Service
 	logger                  *logrus.Logger
 	srv                     *http.Server
 	conf                    Config
@@ -42,12 +44,13 @@ func (s *Server) Shutdown(ctx context.Context) {
 	}
 }
 
-func New(logger *logrus.Logger, authenticationService *authentication.Service,
+func New(logger *logrus.Logger, authenticationService *authentication.Service, iamService *iam.Service,
 	messengerService *ingmessenger.Service, frequentMessagesService *frequentmessages.Service) *Server {
 	return &Server{
 		authenticationService:   authenticationService,
 		messengerService:        messengerService,
 		frequentMessagesService: frequentMessagesService,
+		iamService:              iamService,
 		logger:                  logger,
 		Engine:                  gin.New(),
 	}

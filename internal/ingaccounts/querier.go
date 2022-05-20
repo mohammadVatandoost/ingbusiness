@@ -10,7 +10,8 @@ type Querier interface {
 	AddIngAccount(ctx context.Context, arg AddIngAccountParams) (IngAccount, error)
 	DeleteIngAccount(ctx context.Context, id int32) (IngAccount, error)
 	GetIngAccount(ctx context.Context, id int32) (IngAccount, error)
-	GetIngAccountByUserID(ctx context.Context, ownerID int32) (IngAccount, error)
+	GetIngAccountByOrganizationID(ctx context.Context, organizationID int32) (IngAccount, error)
+	GetIngAccountByUserID(ctx context.Context, creatorID int32) (IngAccount, error)
 	GetIngAccounts(ctx context.Context) ([]IngAccount, error)
 	UpdateIngAccountToken(ctx context.Context, arg UpdateIngAccountTokenParams) (IngAccount, error)
 }

@@ -9,6 +9,8 @@ import (
 type Querier interface {
 	AddAccess(ctx context.Context, arg AddAccessParams) (Access, error)
 	DeleteAccess(ctx context.Context, id int32) (Access, error)
+	DeleteAccessByOrganizationID(ctx context.Context, organizationID int32) ([]Access, error)
+	DeleteAccessByOrganizationIDAndUserID(ctx context.Context, arg DeleteAccessByOrganizationIDAndUserIDParams) ([]Access, error)
 	GetAccess(ctx context.Context, id int32) (Access, error)
 	GetAccessByOrganizationID(ctx context.Context, organizationID int32) ([]Access, error)
 	GetAccessByUserID(ctx context.Context, userID int32) ([]Access, error)

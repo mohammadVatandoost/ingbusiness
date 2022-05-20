@@ -32,3 +32,13 @@ DELETE FROM access
 WHERE id = $1
 RETURNING *;
 
+-- name: DeleteAccessByOrganizationID :many
+DELETE FROM access
+WHERE organization_id = $1
+RETURNING *;
+
+-- name: DeleteAccessByOrganizationIDAndUserID :many
+DELETE FROM access
+WHERE organization_id = $1 and user_id = $2
+RETURNING *;
+

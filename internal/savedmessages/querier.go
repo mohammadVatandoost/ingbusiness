@@ -10,7 +10,7 @@ type Querier interface {
 	AddSavedMessage(ctx context.Context, arg AddSavedMessageParams) (SavedMessage, error)
 	DeleteSavedMessage(ctx context.Context, id int32) (SavedMessage, error)
 	GetSavedMessage(ctx context.Context, id int32) (SavedMessage, error)
-	GetSavedMessageByIngAccountID(ctx context.Context, ingAccountID int32) ([]SavedMessage, error)
+	GetSavedMessageByOrganizationID(ctx context.Context, organizationID int32) ([]SavedMessage, error)
 	GetSavedMessageByWriterID(ctx context.Context, writerID int32) ([]SavedMessage, error)
 	GetSavedMessages(ctx context.Context) ([]SavedMessage, error)
 	UpdateSavedMessageMessage(ctx context.Context, arg UpdateSavedMessageMessageParams) (SavedMessage, error)

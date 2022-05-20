@@ -27,6 +27,7 @@ PROTO_PACKAGES= \
 	api/services/savedmessages/v1 \
 	api/services/notification/v1 \
 	api/services/client/v1 \
+	api/services/organization/v1 \
 	api/services/ingmessenger/v1
 
 PROTO_FOLDERS = $(patsubst %,%,$(PROTO_PACKAGES))
