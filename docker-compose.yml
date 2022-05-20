@@ -3,7 +3,7 @@ version: '2.2'
 services:
   crm:
     container_name: crm
-    image: template
+    build: .
     command: "./service serve"
     network_mode: "host"
     depends_on:

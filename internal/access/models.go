@@ -7,10 +7,11 @@ import (
 )
 
 type Access struct {
-	ID             int32
-	OrganizationID int32
-	UserID         int32
-	RoleID         int32
-	CreateTime     time.Time
-	UpdateTime     time.Time
+	ID               int32
+	OrganizationID   int32
+	OrganizationName string
+	UserID           int32
+	RoleID           int32
+	CreateTime       time.Time
+	UpdateTime       time.Time
 }

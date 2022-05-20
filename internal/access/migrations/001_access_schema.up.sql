@@ -2,6 +2,7 @@
 CREATE TABLE access (
     id SERIAL PRIMARY KEY,
     organization_id INT NOT NULL,
+    organization_name VARCHAR (128) NOT NULL, -- It is redundancy, but it improve performance
     user_id INT NOT NULL,
     role_id INT NOT NULL,
     CONSTRAINT fk_organization

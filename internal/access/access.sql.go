@@ -10,28 +10,37 @@ import (
 const addAccess = `-- name: AddAccess :one
 INSERT INTO access (
     organization_id,
+    organization_name,
     user_id,
     role_id
 ) VALUES (
   $1,
   $2,
-  $3
+  $3,
+  $4
 )
-RETURNING id, organization_id, user_id, role_id, create_time, update_time
+RETURNING id, organization_id, organization_name, user_id, role_id, create_time, update_time
 `
 
 type AddAccessParams struct {
-	OrganizationID int32
-	UserID         int32
-	RoleID         int32
+	OrganizationID   int32
+	OrganizationName string
+	UserID           int32
+	RoleID           int32
 }
 
 func (q *Queries) AddAccess(ctx context.Context, arg AddAccessParams) (Access, error) {
-	row := q.db.QueryRowContext(ctx, addAccess, arg.OrganizationID, arg.UserID, arg.RoleID)
+	row := q.db.QueryRowContext(ctx, addAccess,
+		arg.OrganizationID,
+		arg.OrganizationName,
+		arg.UserID,
+		arg.RoleID,
+	)
 	var i Access
 	err := row.Scan(
 		&i.ID,
 		&i.OrganizationID,
+		&i.OrganizationName,
 		&i.UserID,
 		&i.RoleID,
 		&i.CreateTime,
@@ -43,7 +52,7 @@ func (q *Queries) AddAccess(ctx context.Context, arg AddAccessParams) (Access, e
 const deleteAccess = `-- name: DeleteAccess :one
 DELETE FROM access
 WHERE id = $1
-RETURNING id, organization_id, user_id, role_id, create_time, update_time
+RETURNING id, organization_id, organization_name, user_id, role_id, create_time, update_time
 `
 
 func (q *Queries) DeleteAccess(ctx context.Context, id int32) (Access, error) {
@@ -52,6 +61,7 @@ func (q *Queries) DeleteAccess(ctx context.Context, id int32) (Access, error) {
 	err := row.Scan(
 		&i.ID,
 		&i.OrganizationID,
+		&i.OrganizationName,
 		&i.UserID,
 		&i.RoleID,
 		&i.CreateTime,
@@ -63,7 +73,7 @@ func (q *Queries) DeleteAccess(ctx context.Context, id int32) (Access, error) {
 const deleteAccessByOrganizationID = `-- name: DeleteAccessByOrganizationID :many
 DELETE FROM access
 WHERE organization_id = $1
-RETURNING id, organization_id, user_id, role_id, create_time, update_time
+RETURNING id, organization_id, organization_name, user_id, role_id, create_time, update_time
 `
 
 func (q *Queries) DeleteAccessByOrganizationID(ctx context.Context, organizationID int32) ([]Access, error) {
@@ -78,6 +88,7 @@ func (q *Queries) DeleteAccessByOrganizationID(ctx context.Context, organization
 		if err := rows.Scan(
 			&i.ID,
 			&i.OrganizationID,
+			&i.OrganizationName,
 			&i.UserID,
 			&i.RoleID,
 			&i.CreateTime,
@@ -99,7 +110,7 @@ func (q *Queries) DeleteAccessByOrganizationID(ctx context.Context, organization
 const deleteAccessByOrganizationIDAndUserID = `-- name: DeleteAccessByOrganizationIDAndUserID :many
 DELETE FROM access
 WHERE organization_id = $1 and user_id = $2
-RETURNING id, organization_id, user_id, role_id, create_time, update_time
+RETURNING id, organization_id, organization_name, user_id, role_id, create_time, update_time
 `
 
 type DeleteAccessByOrganizationIDAndUserIDParams struct {
@@ -119,6 +130,7 @@ func (q *Queries) DeleteAccessByOrganizationIDAndUserID(ctx context.Context, arg
 		if err := rows.Scan(
 			&i.ID,
 			&i.OrganizationID,
+			&i.OrganizationName,
 			&i.UserID,
 			&i.RoleID,
 			&i.CreateTime,
@@ -138,7 +150,7 @@ func (q *Queries) DeleteAccessByOrganizationIDAndUserID(ctx context.Context, arg
 }
 
 const getAccess = `-- name: GetAccess :one
-SELECT id, organization_id, user_id, role_id, create_time, update_time FROM access WHERE id = $1
+SELECT id, organization_id, organization_name, user_id, role_id, create_time, update_time FROM access WHERE id = $1
 `
 
 func (q *Queries) GetAccess(ctx context.Context, id int32) (Access, error) {
@@ -147,6 +159,7 @@ func (q *Queries) GetAccess(ctx context.Context, id int32) (Access, error) {
 	err := row.Scan(
 		&i.ID,
 		&i.OrganizationID,
+		&i.OrganizationName,
 		&i.UserID,
 		&i.RoleID,
 		&i.CreateTime,
@@ -156,7 +169,7 @@ func (q *Queries) GetAccess(ctx context.Context, id int32) (Access, error) {
 }
 
 const getAccessByOrganizationID = `-- name: GetAccessByOrganizationID :many
-SELECT id, organization_id, user_id, role_id, create_time, update_time FROM access WHERE organization_id = $1
+SELECT id, organization_id, organization_name, user_id, role_id, create_time, update_time FROM access WHERE organization_id = $1
 `
 
 func (q *Queries) GetAccessByOrganizationID(ctx context.Context, organizationID int32) ([]Access, error) {
@@ -171,6 +184,7 @@ func (q *Queries) GetAccessByOrganizationID(ctx context.Context, organizationID 
 		if err := rows.Scan(
 			&i.ID,
 			&i.OrganizationID,
+			&i.OrganizationName,
 			&i.UserID,
 			&i.RoleID,
 			&i.CreateTime,
@@ -189,8 +203,32 @@ func (q *Queries) GetAccessByOrganizationID(ctx context.Context, organizationID 
 	return items, nil
 }
 
+const getAccessByOrganizationNameAndUserID = `-- name: GetAccessByOrganizationNameAndUserID :one
+SELECT id, organization_id, organization_name, user_id, role_id, create_time, update_time FROM access WHERE organization_name = $1 and user_id = $2
+`
+
+type GetAccessByOrganizationNameAndUserIDParams struct {
+	OrganizationName string
+	UserID           int32
+}
+
+func (q *Queries) GetAccessByOrganizationNameAndUserID(ctx context.Context, arg GetAccessByOrganizationNameAndUserIDParams) (Access, error) {
+	row := q.db.QueryRowContext(ctx, getAccessByOrganizationNameAndUserID, arg.OrganizationName, arg.UserID)
+	var i Access
+	err := row.Scan(
+		&i.ID,
+		&i.OrganizationID,
+		&i.OrganizationName,
+		&i.UserID,
+		&i.RoleID,
+		&i.CreateTime,
+		&i.UpdateTime,
+	)
+	return i, err
+}
+
 const getAccessByUserID = `-- name: GetAccessByUserID :many
-SELECT id, organization_id, user_id, role_id, create_time, update_time FROM access WHERE user_id = $1
+SELECT id, organization_id, organization_name, user_id, role_id, create_time, update_time FROM access WHERE user_id = $1
 `
 
 func (q *Queries) GetAccessByUserID(ctx context.Context, userID int32) ([]Access, error) {
@@ -205,6 +243,7 @@ func (q *Queries) GetAccessByUserID(ctx context.Context, userID int32) ([]Access
 		if err := rows.Scan(
 			&i.ID,
 			&i.OrganizationID,
+			&i.OrganizationName,
 			&i.UserID,
 			&i.RoleID,
 			&i.CreateTime,
@@ -224,7 +263,7 @@ func (q *Queries) GetAccessByUserID(ctx context.Context, userID int32) ([]Access
 }
 
 const getAccesses = `-- name: GetAccesses :many
-SELECT id, organization_id, user_id, role_id, create_time, update_time FROM access
+SELECT id, organization_id, organization_name, user_id, role_id, create_time, update_time FROM access
 `
 
 func (q *Queries) GetAccesses(ctx context.Context) ([]Access, error) {
@@ -239,6 +278,7 @@ func (q *Queries) GetAccesses(ctx context.Context) ([]Access, error) {
 		if err := rows.Scan(
 			&i.ID,
 			&i.OrganizationID,
+			&i.OrganizationName,
 			&i.UserID,
 			&i.RoleID,
 			&i.CreateTime,
@@ -260,7 +300,7 @@ func (q *Queries) GetAccesses(ctx context.Context) ([]Access, error) {
 const updateAccess = `-- name: UpdateAccess :one
 UPDATE access SET role_id = $2
 WHERE id = $1
-RETURNING id, organization_id, user_id, role_id, create_time, update_time
+RETURNING id, organization_id, organization_name, user_id, role_id, create_time, update_time
 `
 
 type UpdateAccessParams struct {
@@ -274,6 +314,7 @@ func (q *Queries) UpdateAccess(ctx context.Context, arg UpdateAccessParams) (Acc
 	err := row.Scan(
 		&i.ID,
 		&i.OrganizationID,
+		&i.OrganizationName,
 		&i.UserID,
 		&i.RoleID,
 		&i.CreateTime,

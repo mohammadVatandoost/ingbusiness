@@ -88,7 +88,7 @@ func (s *Server) OAuth2CallBack(c *gin.Context) {
 func (s *Server) authMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		token := c.GetHeader(AuthTokenHeaderKey)
-		user, err := s.authenticationService.ValidateJWT(token)
+		userInfo, err := s.authenticationService.ValidateJWT(token)
 		if err != nil {
 			s.logger.Warnf("can not ValidateJWT user token, err: %s \n", err.Error())
 			APIResponse(c, http.StatusBadRequest, nil, nil,
@@ -97,7 +97,7 @@ func (s *Server) authMiddleware() gin.HandlerFunc {
 			c.Abort()
 			return
 		}
-		c.Set(UserHeaderKey, user)
+		c.Set(UserContextKey, userInfo)
 		c.Next()
 	}
 }

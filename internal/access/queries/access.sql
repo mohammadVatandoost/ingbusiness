@@ -1,12 +1,14 @@
 -- name: AddAccess :one
 INSERT INTO access (
     organization_id,
+    organization_name,
     user_id,
     role_id
 ) VALUES (
   $1,
   $2,
-  $3
+  $3,
+  $4
 )
 RETURNING *;
 
@@ -21,6 +23,9 @@ SELECT * FROM access WHERE user_id = $1;
 
 -- name: GetAccessByOrganizationID :many
 SELECT * FROM access WHERE organization_id = $1;
+
+-- name: GetAccessByOrganizationNameAndUserID :one
+SELECT * FROM access WHERE organization_name = $1 and user_id = $2;
 
 -- name: UpdateAccess :one
 UPDATE access SET role_id = $2

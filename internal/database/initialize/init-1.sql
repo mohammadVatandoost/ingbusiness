@@ -1,6 +1,6 @@
-CREATE ROLE assist;
-ALTER ROLE assist WITH LOGIN;
-ALTER ROLE assist WITH PASSWORD 'something';
-CREATE DATABASE assist_db;
-GRANT ALL PRIVILEGES ON DATABASE assist_db TO assist;
-ALTER USER assist superuser;
+CREATE ROLE crm;
+ALTER ROLE crm WITH LOGIN;
+ALTER ROLE crm WITH PASSWORD 'something';
+CREATE DATABASE crm_db;
+GRANT ALL PRIVILEGES ON DATABASE crm_db TO assist;
+ALTER USER crm_db superuser;

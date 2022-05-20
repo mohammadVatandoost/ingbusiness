@@ -54,10 +54,11 @@ func (d *Directory) GetSavedMessages(ctx context.Context) ([]SavedMessage, error
 	return savedMessages, nil
 }
 
-func (d *Directory) GetSavedMessageByIngAccountID(ctx context.Context, ingAccountID int32) ([]SavedMessage, error) {
-	savedMessages, err := d.querier.GetSavedMessageByIngAccountID(ctx, ingAccountID)
+func (d *Directory) GetSavedMessageByOrganizationID(ctx context.Context, organizationID int32) ([]SavedMessage, error) {
+	savedMessages, err := d.querier.GetSavedMessageByOrganizationID(ctx, organizationID)
 	if err != nil {
-		return nil, status.Errorf(codes.Internal, "unexpected error GetSavedMessageByIngAccountID: %s", err.Error())
+		return nil, status.Errorf(codes.Internal, "unexpected error GetSavedMessageByOrganizationID: %s",
+			err.Error())
 	}
 	return savedMessages, nil
 }

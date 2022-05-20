@@ -24,6 +24,19 @@ func (s *Service) AddOrganization(ctx context.Context,
 	return &Organization, nil
 }
 
+func (s *Service) GetUserRoleInOrganization(ctx context.Context,
+	userID int32, organizationName string) (int32, error) {
+	Access, err := s.accessDirectory.GetAccessByOrganizationNameAndUserID(ctx,
+		access.GetAccessByOrganizationNameAndUserIDParams{
+			UserID:           userID,
+			OrganizationName: organizationName,
+		})
+	if err != nil {
+		return 0, err
+	}
+	return Access.RoleID, nil
+}
+
 func (s *Service) DeleteOrganization(ctx context.Context, id int32) error {
 	_, err := s.organizationDirectory.DeleteOrganization(ctx, id)
 	if err != nil {

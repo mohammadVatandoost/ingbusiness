@@ -13,6 +13,7 @@ type Querier interface {
 	DeleteAccessByOrganizationIDAndUserID(ctx context.Context, arg DeleteAccessByOrganizationIDAndUserIDParams) ([]Access, error)
 	GetAccess(ctx context.Context, id int32) (Access, error)
 	GetAccessByOrganizationID(ctx context.Context, organizationID int32) ([]Access, error)
+	GetAccessByOrganizationNameAndUserID(ctx context.Context, arg GetAccessByOrganizationNameAndUserIDParams) (Access, error)
 	GetAccessByUserID(ctx context.Context, userID int32) ([]Access, error)
 	GetAccesses(ctx context.Context) ([]Access, error)
 	UpdateAccess(ctx context.Context, arg UpdateAccessParams) (Access, error)

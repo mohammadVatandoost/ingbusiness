@@ -71,6 +71,15 @@ func (d *Directory) GetAccessByUserID(ctx context.Context, userID int32) ([]Acce
 	return accesses, nil
 }
 
+func (d *Directory) GetAccessByOrganizationNameAndUserID(ctx context.Context, arg GetAccessByOrganizationNameAndUserIDParams) (Access, error) {
+	access, err := d.querier.GetAccessByOrganizationNameAndUserID(ctx, arg)
+	if err != nil {
+		return access, status.Errorf(codes.Internal,
+			"unexpected error GetAccessByOrganizationNameAndUserID: %s", err.Error())
+	}
+	return access, nil
+}
+
 func (d *Directory) DeleteAccess(ctx context.Context, id int32) (Access, error) {
 	access, err := d.querier.DeleteAccess(ctx, id)
 	if err != nil {
