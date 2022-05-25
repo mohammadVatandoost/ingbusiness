@@ -8,6 +8,7 @@ import (
 	"github.com/mohammadVatandoost/ingbusiness/internal/services/frequentmessages"
 	"github.com/mohammadVatandoost/ingbusiness/internal/services/iam"
 	"github.com/mohammadVatandoost/ingbusiness/internal/services/ingmessenger"
+	"github.com/mohammadVatandoost/ingbusiness/internal/services/user"
 	"github.com/sirupsen/logrus"
 	"net/http"
 )
@@ -18,6 +19,7 @@ type Server struct {
 	messengerService        *ingmessenger.Service
 	frequentMessagesService *frequentmessages.Service
 	iamService              *iam.Service
+	userService             *user.Service
 	logger                  *logrus.Logger
 	srv                     *http.Server
 	conf                    Config
@@ -44,13 +46,15 @@ func (s *Server) Shutdown(ctx context.Context) {
 	}
 }
 
-func New(logger *logrus.Logger, conf Config, authenticationService *authentication.Service, iamService *iam.Service,
+func New(logger *logrus.Logger, conf Config, authenticationService *authentication.Service,
+	userService *user.Service, iamService *iam.Service,
 	messengerService *ingmessenger.Service, frequentMessagesService *frequentmessages.Service) *Server {
 	return &Server{
 		authenticationService:   authenticationService,
 		messengerService:        messengerService,
 		frequentMessagesService: frequentMessagesService,
 		iamService:              iamService,
+		userService:             userService,
 		logger:                  logger,
 		Engine:                  gin.New(),
 		conf:                    conf,

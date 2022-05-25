@@ -13,6 +13,7 @@ import (
 	"github.com/mohammadVatandoost/ingbusiness/internal/services/frequentmessages"
 	"github.com/mohammadVatandoost/ingbusiness/internal/services/iam"
 	"github.com/mohammadVatandoost/ingbusiness/internal/services/ingmessenger"
+	"github.com/mohammadVatandoost/ingbusiness/internal/services/user"
 	"github.com/mohammadVatandoost/ingbusiness/internal/users"
 	"github.com/mohammadVatandoost/ingbusiness/pkg/logger"
 	"sync"
@@ -66,8 +67,10 @@ func serveAdmin(cmd *cobra.Command, args []string) error {
 	ingMessengerService := ingmessenger.New(usersDirectory, ingAccountsDirectory, savedMessagesDirectory)
 	frequentMessagesService := frequentmessages.New(savedMessagesDirectory)
 	iamService := iam.New(organizationDirectory, rolesDirectory, accessDirectory, usersDirectory)
+	userService := user.New(usersDirectory)
 
-	serverREST := restAPI.New(log, conf.Rest, authenticationService, iamService, ingMessengerService, frequentMessagesService)
+	serverREST := restAPI.New(log, conf.Rest, authenticationService, userService, iamService,
+		ingMessengerService, frequentMessagesService)
 	serverREST.Routes()
 
 	goAdmin := goadmin.NewController()

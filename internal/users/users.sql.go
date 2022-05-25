@@ -13,23 +13,26 @@ INSERT INTO users (
   username,
   email,
   phone,
-  password
+  password,
+  profile_image
 ) VALUES (
   $1,
   $2,
   $3,
   $4,
-  $5
+  $5,
+  $6
 )
-RETURNING id, name, username, email, phone, password, create_time, update_time
+RETURNING id, name, username, email, phone, password, profile_image, create_time, update_time
 `
 
 type AddUserParams struct {
-	Name     string
-	Username string
-	Email    string
-	Phone    string
-	Password string
+	Name         string
+	Username     string
+	Email        string
+	Phone        string
+	Password     string
+	ProfileImage string
 }
 
 func (q *Queries) AddUser(ctx context.Context, arg AddUserParams) (User, error) {
@@ -39,6 +42,7 @@ func (q *Queries) AddUser(ctx context.Context, arg AddUserParams) (User, error) 
 		arg.Email,
 		arg.Phone,
 		arg.Password,
+		arg.ProfileImage,
 	)
 	var i User
 	err := row.Scan(
@@ -48,6 +52,7 @@ func (q *Queries) AddUser(ctx context.Context, arg AddUserParams) (User, error) 
 		&i.Email,
 		&i.Phone,
 		&i.Password,
+		&i.ProfileImage,
 		&i.CreateTime,
 		&i.UpdateTime,
 	)
@@ -57,7 +62,7 @@ func (q *Queries) AddUser(ctx context.Context, arg AddUserParams) (User, error) 
 const deleteUser = `-- name: DeleteUser :one
 DELETE FROM users
 WHERE id = $1
-RETURNING id, name, username, email, phone, password, create_time, update_time
+RETURNING id, name, username, email, phone, password, profile_image, create_time, update_time
 `
 
 func (q *Queries) DeleteUser(ctx context.Context, id int32) (User, error) {
@@ -70,6 +75,7 @@ func (q *Queries) DeleteUser(ctx context.Context, id int32) (User, error) {
 		&i.Email,
 		&i.Phone,
 		&i.Password,
+		&i.ProfileImage,
 		&i.CreateTime,
 		&i.UpdateTime,
 	)
@@ -77,7 +83,7 @@ func (q *Queries) DeleteUser(ctx context.Context, id int32) (User, error) {
 }
 
 const getUser = `-- name: GetUser :one
-SELECT id, name, username, email, phone, password, create_time, update_time FROM users WHERE id = $1
+SELECT id, name, username, email, phone, password, profile_image, create_time, update_time FROM users WHERE id = $1
 `
 
 func (q *Queries) GetUser(ctx context.Context, id int32) (User, error) {
@@ -90,6 +96,7 @@ func (q *Queries) GetUser(ctx context.Context, id int32) (User, error) {
 		&i.Email,
 		&i.Phone,
 		&i.Password,
+		&i.ProfileImage,
 		&i.CreateTime,
 		&i.UpdateTime,
 	)
@@ -97,7 +104,7 @@ func (q *Queries) GetUser(ctx context.Context, id int32) (User, error) {
 }
 
 const getUserByEmail = `-- name: GetUserByEmail :one
-SELECT id, name, username, email, phone, password, create_time, update_time FROM users WHERE email = $1
+SELECT id, name, username, email, phone, password, profile_image, create_time, update_time FROM users WHERE email = $1
 `
 
 func (q *Queries) GetUserByEmail(ctx context.Context, email string) (User, error) {
@@ -110,6 +117,7 @@ func (q *Queries) GetUserByEmail(ctx context.Context, email string) (User, error
 		&i.Email,
 		&i.Phone,
 		&i.Password,
+		&i.ProfileImage,
 		&i.CreateTime,
 		&i.UpdateTime,
 	)
@@ -117,7 +125,7 @@ func (q *Queries) GetUserByEmail(ctx context.Context, email string) (User, error
 }
 
 const getUserByPhone = `-- name: GetUserByPhone :one
-SELECT id, name, username, email, phone, password, create_time, update_time FROM users WHERE phone = $1
+SELECT id, name, username, email, phone, password, profile_image, create_time, update_time FROM users WHERE phone = $1
 `
 
 func (q *Queries) GetUserByPhone(ctx context.Context, phone string) (User, error) {
@@ -130,6 +138,7 @@ func (q *Queries) GetUserByPhone(ctx context.Context, phone string) (User, error
 		&i.Email,
 		&i.Phone,
 		&i.Password,
+		&i.ProfileImage,
 		&i.CreateTime,
 		&i.UpdateTime,
 	)
@@ -137,7 +146,7 @@ func (q *Queries) GetUserByPhone(ctx context.Context, phone string) (User, error
 }
 
 const getUserByUserName = `-- name: GetUserByUserName :one
-SELECT id, name, username, email, phone, password, create_time, update_time FROM users WHERE username = $1
+SELECT id, name, username, email, phone, password, profile_image, create_time, update_time FROM users WHERE username = $1
 `
 
 func (q *Queries) GetUserByUserName(ctx context.Context, username string) (User, error) {
@@ -150,6 +159,7 @@ func (q *Queries) GetUserByUserName(ctx context.Context, username string) (User,
 		&i.Email,
 		&i.Phone,
 		&i.Password,
+		&i.ProfileImage,
 		&i.CreateTime,
 		&i.UpdateTime,
 	)
@@ -157,7 +167,7 @@ func (q *Queries) GetUserByUserName(ctx context.Context, username string) (User,
 }
 
 const getUsers = `-- name: GetUsers :many
-SELECT id, name, username, email, phone, password, create_time, update_time FROM users
+SELECT id, name, username, email, phone, password, profile_image, create_time, update_time FROM users
 `
 
 func (q *Queries) GetUsers(ctx context.Context) ([]User, error) {
@@ -176,6 +186,7 @@ func (q *Queries) GetUsers(ctx context.Context) ([]User, error) {
 			&i.Email,
 			&i.Phone,
 			&i.Password,
+			&i.ProfileImage,
 			&i.CreateTime,
 			&i.UpdateTime,
 		); err != nil {
@@ -195,7 +206,7 @@ func (q *Queries) GetUsers(ctx context.Context) ([]User, error) {
 const updateUser = `-- name: UpdateUser :one
 UPDATE users SET name = $2, username = $3, email = $4, phone = $5, password = $6
 WHERE id = $1
-RETURNING id, name, username, email, phone, password, create_time, update_time
+RETURNING id, name, username, email, phone, password, profile_image, create_time, update_time
 `
 
 type UpdateUserParams struct {
@@ -224,6 +235,7 @@ func (q *Queries) UpdateUser(ctx context.Context, arg UpdateUserParams) (User, e
 		&i.Email,
 		&i.Phone,
 		&i.Password,
+		&i.ProfileImage,
 		&i.CreateTime,
 		&i.UpdateTime,
 	)

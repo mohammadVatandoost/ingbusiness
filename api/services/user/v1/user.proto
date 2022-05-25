@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+option go_package = "github.com/mohammadVatandoost/ingbusiness/api/services/user/v1;user";
+
+message Profile {
+  int32  id = 1;
+  string name = 2;
+  string username = 3;
+  string  email = 4;
+  string  phone = 5;
+  string  profile_image = 6;
+}

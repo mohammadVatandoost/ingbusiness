@@ -5,7 +5,7 @@ CREATE TABLE users (
                        email VARCHAR (128) NOT NULL,
                        phone VARCHAR (128) NOT NULL,
                        password VARCHAR (128) NOT NULL,
-                       profile_image TEXT,
+                       profile_image TEXT NOT NULL,
                        CONSTRAINT username_unique UNIQUE (username),
                        CONSTRAINT email_unique UNIQUE (email),
                        CONSTRAINT phone_unique UNIQUE (phone),
