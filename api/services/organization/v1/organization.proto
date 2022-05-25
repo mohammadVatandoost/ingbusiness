@@ -1,8 +1,0 @@
-syntax = "proto3";
-
-option go_package = "github.com/mohammadVatandoost/ingbusiness/api/services/organization/v1;organization";
-
-message Organization {
-  string name = 1;
-  int32 owner_id = 2;
-}

@@ -72,7 +72,7 @@ func serve(cmd *cobra.Command, args []string) error {
 	frequentMessagesService := frequentmessages.New(savedMessagesDirectory)
 	iamService := iam.New(organizationDirectory, rolesDirectory, accessDirectory, usersDirectory)
 
-	serverREST := restAPI.New(log, authenticationService, iamService, ingMessengerService, frequentMessagesService)
+	serverREST := restAPI.New(log, conf.Rest, authenticationService, iamService, ingMessengerService, frequentMessagesService)
 	serverREST.Routes()
 
 	serverContext, serverCancel := cntext.WithSignalCancellation(

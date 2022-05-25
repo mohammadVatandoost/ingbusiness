@@ -40,4 +40,10 @@ func (s *Server) Routes() {
 	organizationGroup.POST("/deleteSavedMessage", s.DeleteSavedMessage)
 	organizationGroup.POST("/updateSavedMessage", s.UpdateSavedMessage)
 
+	// messenger
+	//organizationGroup.POST("/saveMessage", s.SaveMessage)
+	//organizationGroup.POST("/getSavedMessages", s.GetSavedMessages)
+	//organizationGroup.POST("/deleteSavedMessage", s.DeleteSavedMessage)
+	//organizationGroup.POST("/updateSavedMessage", s.UpdateSavedMessage)
+
 }

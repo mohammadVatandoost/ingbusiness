@@ -43,7 +43,8 @@ func APIResponse(c *gin.Context, status int, message []string, payload interface
 		logrus.Errorf("can not convert client response message to json, res: %s, err: %s \n",
 			res.String(), err.Error())
 	}
-	c.String(status, string(bytes))
+	c.Data(status, "application/json", bytes)
+	//c.String(status, string(bytes))
 	//c.JSON(status, gin.H{
 	//	"messages":      message,
 	//	"notifications": notifications,

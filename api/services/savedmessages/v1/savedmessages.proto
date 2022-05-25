@@ -6,5 +6,5 @@ message SavedMessage {
   int32  id = 1;
   string messageContent = 2;
   string image = 3;
-  int32  IngAccountID = 4;
+  int32  organizationID = 4;
 }

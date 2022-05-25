@@ -27,7 +27,7 @@ PROTO_PACKAGES= \
 	api/services/savedmessages/v1 \
 	api/services/notification/v1 \
 	api/services/client/v1 \
-	api/services/organization/v1 \
+	api/services/iam/v1 \
 	api/services/ingmessenger/v1
 
 PROTO_FOLDERS = $(patsubst %,%,$(PROTO_PACKAGES))
@@ -49,7 +49,7 @@ generate_sql: .bin/sqlc
 generate_proto:
 	$(foreach dir,$(PROTO_FOLDERS), \
 		protoc --go_out=paths=source_relative:./ -I. $(dir)/*.proto; \
-		protoc --go_out=plugins=grpc:./ --go_opt=paths=source_relative $(dir)/*.proto; \
+		protoc --go-grpc_out=./ --go-grpc_opt=paths=source_relative $(dir)/*.proto; \
 	)
 
 get_list_files: $(SQL_FOLDERS) | .remove_empty_dirs ## to generate all auto-generated files

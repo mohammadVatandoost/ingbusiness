@@ -44,7 +44,7 @@ func (s *Server) Shutdown(ctx context.Context) {
 	}
 }
 
-func New(logger *logrus.Logger, authenticationService *authentication.Service, iamService *iam.Service,
+func New(logger *logrus.Logger, conf Config, authenticationService *authentication.Service, iamService *iam.Service,
 	messengerService *ingmessenger.Service, frequentMessagesService *frequentmessages.Service) *Server {
 	return &Server{
 		authenticationService:   authenticationService,
@@ -53,5 +53,6 @@ func New(logger *logrus.Logger, authenticationService *authentication.Service, i
 		iamService:              iamService,
 		logger:                  logger,
 		Engine:                  gin.New(),
+		conf:                    conf,
 	}
 }

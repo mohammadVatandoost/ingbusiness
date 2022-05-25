@@ -42,9 +42,9 @@ func LoadConfig(cmd *cobra.Command) (*Config, error) {
 
 	viper.SetDefault("postgres.host", "localhost")
 	viper.SetDefault("postgres.port", 5432)
-	viper.SetDefault("postgres.username", "postgres")
-	viper.SetDefault("postgres.password", "123")
-	viper.SetDefault("postgres.database", "postgres")
+	viper.SetDefault("postgres.username", "crm")
+	viper.SetDefault("postgres.password", "something")
+	viper.SetDefault("postgres.database", "crm_db")
 	viper.SetDefault("postgres.ssl", "disable")
 	viper.SetDefault("postgres.MigrationVersion", 1)
 
@@ -58,8 +58,10 @@ func LoadConfig(cmd *cobra.Command) (*Config, error) {
 	viper.SetDefault("auth.GoogleKey", "GoogleKey")
 	viper.SetDefault("auth.GoogleSecret", "GoogleSecret")
 	viper.SetDefault("auth.GoogleCallbackUrl", "http://localhost:3000/auth/google/callback")
-
 	viper.SetDefault("auth.EnableSSL", false)
+
+	viper.SetDefault("Rest.ListenPort", 9077)
+	viper.SetDefault("Rest.TimeOut", 10)
 
 	// Read Config from ENV
 	viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))

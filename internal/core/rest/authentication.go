@@ -54,8 +54,9 @@ func (s *Server) SignIn(c *gin.Context) {
 	}
 
 	SetAuthToken(c, res.Token)
-	SetUserID(c, res.UserID)
-	c.Redirect(http.StatusOK, UserDashboardPath)
+	//SetUserID(c, res.UserID)
+	c.Status(http.StatusOK)
+	//c.Redirect(http.StatusOK, UserDashboardPath)
 
 }
 
@@ -81,8 +82,9 @@ func (s *Server) OAuth2CallBack(c *gin.Context) {
 		return
 	}
 	SetAuthToken(c, res.Token)
-	SetUserID(c, res.UserID)
-	c.Redirect(http.StatusOK, UserDashboardPath)
+	//SetUserID(c, res.UserID)
+	c.Status(http.StatusOK)
+	//c.Redirect(http.StatusOK, UserDashboardPath)
 }
 
 func (s *Server) authMiddleware() gin.HandlerFunc {

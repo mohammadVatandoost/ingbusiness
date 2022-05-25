@@ -11,3 +11,4 @@
 - [x] Add Authentication service
 - [x] Add Google Login
 - [x] Add IAM Service
+- [x] Add Frequent message service

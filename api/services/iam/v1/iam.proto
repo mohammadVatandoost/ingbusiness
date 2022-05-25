@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+option go_package = "github.com/mohammadVatandoost/ingbusiness/api/services/iam/v1;iam";
+
+message Organization {
+  string name = 1;
+  int32 owner_id = 2;
+  int32 id = 3;
+}
+
+message OrganizationPermission {
+  string email = 1;
+  int32 id = 3;
+}

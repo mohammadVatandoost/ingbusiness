@@ -19,15 +19,15 @@ services:
       POSTGRES_SSL: "disable"
       POSTGRES_MIGRATIONVERSION: 1
   db:
-    container_name: postgres
     image: postgres:14.3
     restart: always
+    network_mode: "host"
     environment:
       POSTGRES_USER: crm
       POSTGRES_PASSWORD: something
       POSTGRES_DB: crm_db
     healthcheck:
-      test: [ "CMD", "pg_isready" ]
+      test: [ "CMD", "pg_isready", "-U", "crm", "-d", "crm_db" ]
       interval: 10s
       timeout: 5s
       retries: 5

@@ -3,11 +3,15 @@ package main
 import (
 	"context"
 	"fmt"
+	"github.com/mohammadVatandoost/ingbusiness/internal/access"
 	"github.com/mohammadVatandoost/ingbusiness/internal/database"
 	"github.com/mohammadVatandoost/ingbusiness/internal/ingaccounts"
+	"github.com/mohammadVatandoost/ingbusiness/internal/organization"
+	roles "github.com/mohammadVatandoost/ingbusiness/internal/role"
 	"github.com/mohammadVatandoost/ingbusiness/internal/savedmessages"
 	"github.com/mohammadVatandoost/ingbusiness/internal/services/authentication"
 	"github.com/mohammadVatandoost/ingbusiness/internal/services/frequentmessages"
+	"github.com/mohammadVatandoost/ingbusiness/internal/services/iam"
 	"github.com/mohammadVatandoost/ingbusiness/internal/services/ingmessenger"
 	"github.com/mohammadVatandoost/ingbusiness/internal/users"
 	"github.com/mohammadVatandoost/ingbusiness/pkg/logger"
@@ -54,12 +58,16 @@ func serveAdmin(cmd *cobra.Command, args []string) error {
 	usersDirectory := users.NewDirectory(log, db)
 	savedMessagesDirectory := savedmessages.NewDirectory(log, db)
 	ingAccountsDirectory := ingaccounts.NewDirectory(log, db)
+	organizationDirectory := organization.NewDirectory(log, db)
+	rolesDirectory := roles.NewDirectory(log, db)
+	accessDirectory := access.NewDirectory(log, db)
 
 	authenticationService := authentication.New(log, usersDirectory, conf.Auth)
 	ingMessengerService := ingmessenger.New(usersDirectory, ingAccountsDirectory, savedMessagesDirectory)
 	frequentMessagesService := frequentmessages.New(savedMessagesDirectory)
+	iamService := iam.New(organizationDirectory, rolesDirectory, accessDirectory, usersDirectory)
 
-	serverREST := restAPI.New(log, authenticationService, ingMessengerService, frequentMessagesService)
+	serverREST := restAPI.New(log, conf.Rest, authenticationService, iamService, ingMessengerService, frequentMessagesService)
 	serverREST.Routes()
 
 	goAdmin := goadmin.NewController()

@@ -10,9 +10,9 @@ func (s *Service) Add(ctx context.Context, savedMessage *v1.SavedMessage,
 	userID int32) (savedmessages.SavedMessage, error) {
 	SavedMessage, err := s.savedMessagesDirectory.AddSavedMessage(ctx,
 		savedmessages.AddSavedMessageParams{
-			Message:      savedMessage.MessageContent,
-			IngAccountID: savedMessage.IngAccountID,
-			WriterID:     userID,
+			Message:        savedMessage.MessageContent,
+			OrganizationID: savedMessage.OrganizationID,
+			WriterID:       userID,
 		})
 	return SavedMessage, err
 }

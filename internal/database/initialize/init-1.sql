@@ -1,4 +1,4 @@
-CREATE ROLE crm;
+CREATE ROLE crm if not exists;
 ALTER ROLE crm WITH LOGIN;
 ALTER ROLE crm WITH PASSWORD 'something';
 CREATE DATABASE crm_db;
