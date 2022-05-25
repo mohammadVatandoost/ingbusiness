@@ -9,6 +9,7 @@ import (
 type SavedMessage struct {
 	ID             int32
 	Message        string
+	Image          string
 	OrganizationID int32
 	WriterID       int32
 	CreateTime     time.Time

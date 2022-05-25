@@ -7,4 +7,5 @@ message SavedMessage {
   string messageContent = 2;
   string image = 3;
   int32  organizationID = 4;
+  int32  writerID = 5;
 }

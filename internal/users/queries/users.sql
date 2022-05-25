@@ -4,13 +4,15 @@ INSERT INTO users (
   username,
   email,
   phone,
-  password
+  password,
+  profile_image
 ) VALUES (
   $1,
   $2,
   $3,
   $4,
-  $5
+  $5,
+  $6
 )
 RETURNING *;
 

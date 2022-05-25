@@ -2,6 +2,7 @@
 CREATE TABLE saved_messages (
     id SERIAL PRIMARY KEY,
     message TEXT NOT NULL,
+    image TEXT,
     organization_id INT NOT NULL,
     writer_id  INT NOT NULL,
     CONSTRAINT fk_user

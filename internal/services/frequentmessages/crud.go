@@ -36,3 +36,8 @@ func (s *Service) GetSavedMessages(ctx context.Context) ([]savedmessages.SavedMe
 	SavedMessages, err := s.savedMessagesDirectory.GetSavedMessages(ctx)
 	return SavedMessages, err
 }
+
+func (s *Service) GetSavedMessageByOrganizationID(ctx context.Context, organizationID int32) ([]savedmessages.SavedMessage, error) {
+	SavedMessages, err := s.savedMessagesDirectory.GetSavedMessageByOrganizationID(ctx, organizationID)
+	return SavedMessages, err
+}

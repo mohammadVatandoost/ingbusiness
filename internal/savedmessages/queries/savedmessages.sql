@@ -1,12 +1,14 @@
 -- name: AddSavedMessage :one
 INSERT INTO saved_messages (
   message,
+  image,
   organization_id,
   writer_id
 ) VALUES (
   $1,
   $2,
-  $3
+  $3,
+  $4
 )
 RETURNING *;
 
