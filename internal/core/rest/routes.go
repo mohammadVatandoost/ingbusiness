@@ -49,6 +49,6 @@ func (s *Server) Routes() {
 	organizationGroup.POST("/addIngPage", s.AddIngPage)
 	organizationGroup.POST("/getIngPages", s.GetIngPages)
 	organizationGroup.POST("/deleteIngPage", s.DeleteIngPage)
-	organizationGroup.POST("/updateSavedMessage", s.UpdateSavedMessage)
+	organizationGroup.POST("/updateIngPage", s.UpdateIngPage)
 
 }

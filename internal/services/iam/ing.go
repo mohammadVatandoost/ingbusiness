@@ -25,3 +25,8 @@ func (s *Service) DeleteIngPage(ctx context.Context,
 	id int32) (ingpages.IngPage, error) {
 	return s.ingDirectory.DeleteIngPage(ctx, id)
 }
+
+func (s *Service) UpdateIngPage(ctx context.Context,
+	arg ingpages.UpdateIngPageTokenParams) (ingpages.IngPage, error) {
+	return s.ingDirectory.UpdateIngPageToken(ctx, arg)
+}

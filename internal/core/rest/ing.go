@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	iamV1 "github.com/mohammadVatandoost/ingbusiness/api/services/iam/v1"
+	"github.com/mohammadVatandoost/ingbusiness/internal/ingpages"
 	"github.com/mohammadVatandoost/ingbusiness/internal/services/iam"
 	"github.com/mohammadVatandoost/ingbusiness/pkg/jwt"
 	"net/http"
@@ -84,4 +85,28 @@ func (s *Server) DeleteIngPage(c *gin.Context) {
 	}
 
 	OKResponse(c, iam.DeletePage)
+}
+
+func (s *Server) UpdateIngPage(c *gin.Context) {
+	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(s.conf.TimeOut)*time.Second)
+	defer cancel()
+
+	var data iamV1.IngPage
+
+	err := c.BindJSON(&data)
+	if err != nil {
+		s.logger.Errorf("can not get json data for UpdateIngPage, err: %s \n", err.Error())
+		ErrorResponse(c, err.Error())
+		return
+	}
+
+	_, err = s.iamService.UpdateIngPage(ctx,
+		ingpages.UpdateIngPageTokenParams{ID: data.Id, Token: data.Token})
+	if err != nil {
+		s.logger.Errorf("can not UpdateIngPage, err: %s \n", err.Error())
+		ErrorResponse(c, err.Error())
+		return
+	}
+
+	OKResponse(c, iam.UpdateTokenPage)
 }
