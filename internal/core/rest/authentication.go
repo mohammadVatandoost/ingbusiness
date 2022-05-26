@@ -99,7 +99,7 @@ func (s *Server) authMiddleware() gin.HandlerFunc {
 			c.Abort()
 			return
 		}
-		c.Set(UserContextKey, userInfo)
+		c.Set(UserContextKey, *userInfo)
 		c.Next()
 	}
 }

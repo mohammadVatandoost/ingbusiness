@@ -18,7 +18,7 @@ SQL_MODELS= \
 	internal/organization \
 	internal/access \
 	internal/role \
-	internal/ingaccounts
+	internal/ingpages
 
 SQL_FOLDERS = $(patsubst %,%,$(SQL_MODELS))
 

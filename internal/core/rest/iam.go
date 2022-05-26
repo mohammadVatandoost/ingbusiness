@@ -43,6 +43,35 @@ func (s *Server) AddOrganization(c *gin.Context) {
 		"", nil)
 }
 
+func (s *Server) GetOrganizationUserHasRole(c *gin.Context) {
+	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(s.conf.TimeOut)*time.Second)
+	defer cancel()
+
+	userInfo, _ := c.Get(UserContextKey)
+
+	access, err := s.iamService.GetOrganizationUserHasRole(ctx, userInfo.(jwt.Message).UserID)
+	if err != nil {
+		s.logger.Errorf("can not GetOrganizationUserHasRole, id: %v, err: %s \n",
+			userInfo.(jwt.Message).UserID, err.Error())
+		ErrorResponse(c, err.Error())
+		return
+	}
+
+	var res []iamV1.OrganizationAccess
+	for _, a := range access {
+		res = append(res, iamV1.OrganizationAccess{
+			OrganizationID:   a.OrganizationID,
+			OrganizationName: a.OrganizationName,
+			RoleID:           a.RoleID,
+			UserID:           a.UserID,
+		})
+	}
+	APIResponse(c, http.StatusOK, nil,
+		res,
+		nil,
+		"", nil)
+}
+
 func (s *Server) GiveOrganizationPermissionByEmail(c *gin.Context) {
 	//just Owner
 	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(s.conf.TimeOut)*time.Second)
@@ -50,25 +79,29 @@ func (s *Server) GiveOrganizationPermissionByEmail(c *gin.Context) {
 	var data iamV1.OrganizationPermission
 	err := c.BindJSON(&data)
 	if err != nil {
-		s.logger.Errorf("can not get json data for GiveOrganizationPermissionByEmail, err: %s \n", err.Error())
+		s.logger.Errorf("can not get json data for GiveOrganizationPermissionByEmail, "+
+			"ID: %v, Email: %v, err: %s \n",
+			data.Id, data.Email, err.Error())
 		ErrorResponse(c, err.Error())
 		return
 	}
 
+	userInfo, _ := c.Get(UserContextKey)
 	roleType, ok := c.Get(UserRoleContextKey)
 	if !ok {
-		s.logger.Warn("user role is not set correctly \n")
+		s.logger.Warnf("user role is not set correctly \n")
 		APIResponse(c, http.StatusBadRequest, nil, nil,
-			notification.BuildNotification(notification.MakeError("", authentication.ErrorNotAuthorized)),
-			AuthSignIn, nil)
+			notification.BuildNotification(notification.MakeError("", authentication.ErrorNotOwner)),
+			"", nil)
 		return
 	}
 
-	if roleType != iam.OwnerRole {
-		s.logger.Warn("user role is not Owner \n")
+	if roleType.(int32) != iam.OwnerRole {
+		s.logger.Warnf("user role is not Owner , userID: %v, roleType: %v \n",
+			userInfo.(jwt.Message).UserID, roleType)
 		APIResponse(c, http.StatusBadRequest, nil, nil,
-			notification.BuildNotification(notification.MakeError("", authentication.ErrorNotAuthorized)),
-			AuthSignIn, nil)
+			notification.BuildNotification(notification.MakeError("", authentication.ErrorNotOwner)),
+			"", nil)
 		return
 	}
 

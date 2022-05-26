@@ -1,10 +1,11 @@
 package rest
 
 import (
+	"encoding/json"
 	client "github.com/mohammadVatandoost/ingbusiness/api/services/client/v1"
 	v1 "github.com/mohammadVatandoost/ingbusiness/api/services/notification/v1"
+	"github.com/mohammadVatandoost/ingbusiness/pkg/notification"
 	"github.com/sirupsen/logrus"
-	"google.golang.org/protobuf/proto"
 	"net/http"
 	"strconv"
 
@@ -17,9 +18,17 @@ const (
 )
 
 func ErrorResponse(c *gin.Context, message string) {
-	c.JSON(http.StatusBadRequest, gin.H{
-		"error": message,
-	})
+	//c.JSON(http.StatusBadRequest, gin.H{
+	//	"error": message,
+	//})
+
+	APIResponse(c, http.StatusBadRequest, nil, nil,
+		nil, "", []string{message})
+}
+
+func OKResponse(c *gin.Context, message string) {
+	APIResponse(c, http.StatusOK, nil, nil,
+		[]*v1.Notification{notification.MakeSuccess("", message)}, "", nil)
 }
 
 func SetAuthToken(c *gin.Context, token string) {
@@ -38,18 +47,17 @@ func APIResponse(c *gin.Context, status int, message []string, payload interface
 		Errors:        errors,
 		Messages:      message,
 	}
-	bytes, err := proto.Marshal(&res)
+
+	jsonConfigs, err := json.Marshal(&res)
 	if err != nil {
 		logrus.Errorf("can not convert client response message to json, res: %s, err: %s \n",
 			res.String(), err.Error())
 	}
-	c.Data(status, "application/json", bytes)
+
+	//c.Data(status, gin.MIMEJSON, bytes)
 	//c.String(status, string(bytes))
-	//c.JSON(status, gin.H{
-	//	"messages":      message,
-	//	"notifications": notifications,
-	//	"payload":       payload,
-	//	"redirect":      redirectURL,
-	//	"errors":        err,
-	//})
+	c.JSON(status, gin.H{
+		"metadata": string(jsonConfigs),
+		"payload":  payload,
+	})
 }

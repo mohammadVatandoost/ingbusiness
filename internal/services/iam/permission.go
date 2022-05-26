@@ -4,14 +4,13 @@ import (
 	"context"
 	"fmt"
 	"github.com/mohammadVatandoost/ingbusiness/internal/access"
+	roles "github.com/mohammadVatandoost/ingbusiness/internal/role"
 )
 
 const (
-	OwnerRole = iota
+	OwnerRole = iota + 1
 	AdminRole
 )
-
-const ErrorUserIsNotRegistered = "کاربری با این ایمیل ثبت نام نشده است، از ایشان بخواهید در سایت ثبت نام کند."
 
 func (s *Service) GivePermissionByEmail(ctx context.Context,
 	email string, organizationId int32) error {
@@ -20,10 +19,21 @@ func (s *Service) GivePermissionByEmail(ctx context.Context,
 		//ToDo: send email to user to register
 		return fmt.Errorf("%s", ErrorUserIsNotRegistered)
 	}
+
+	//ToDo: get role type from user
+	role, err := s.rolesDirectory.GetRoleByOrganizationIDAndRoleType(ctx,
+		roles.GetRoleByOrganizationIDAndRoleTypeParams{
+			OrganizationID: organizationId,
+			RoleType:       AdminRole,
+		})
+	if err != nil {
+		return fmt.Errorf("admin role does not exist, organizationId: %v", organizationId)
+	}
+
 	_, err = s.accessDirectory.AddAccess(ctx, access.AddAccessParams{
 		UserID:         user.ID,
 		OrganizationID: organizationId,
-		RoleID:         AdminRole,
+		RoleID:         role.ID,
 	})
 	return err
 }

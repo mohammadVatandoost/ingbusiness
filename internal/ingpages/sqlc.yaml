@@ -1,6 +1,6 @@
 version: "1"
 packages:
-  - name: "ingaccounts"
+  - name: "ingpages"
     path: "."
     queries: "queries"
     schema: "migrations"

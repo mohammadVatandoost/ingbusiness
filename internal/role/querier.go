@@ -12,6 +12,7 @@ type Querier interface {
 	GetRole(ctx context.Context, id int32) (Role, error)
 	GetRoleByCreatorID(ctx context.Context, creatorID int32) ([]Role, error)
 	GetRoleByOrganizationID(ctx context.Context, organizationID int32) ([]Role, error)
+	GetRoleByOrganizationIDAndRoleType(ctx context.Context, arg GetRoleByOrganizationIDAndRoleTypeParams) (Role, error)
 	GetRoles(ctx context.Context) ([]Role, error)
 }
 

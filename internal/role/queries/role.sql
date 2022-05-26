@@ -19,6 +19,9 @@ SELECT * FROM roles WHERE id = $1;
 -- name: GetRoleByOrganizationID :many
 SELECT * FROM roles WHERE organization_id = $1;
 
+-- name: GetRoleByOrganizationIDAndRoleType :one
+SELECT * FROM roles WHERE organization_id = $1 and role_type = $2;
+
 -- name: GetRoleByCreatorID :many
 SELECT * FROM roles WHERE creator_id = $1;
 

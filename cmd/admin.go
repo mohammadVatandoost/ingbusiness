@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"github.com/mohammadVatandoost/ingbusiness/internal/access"
 	"github.com/mohammadVatandoost/ingbusiness/internal/database"
-	"github.com/mohammadVatandoost/ingbusiness/internal/ingaccounts"
 	"github.com/mohammadVatandoost/ingbusiness/internal/organization"
 	roles "github.com/mohammadVatandoost/ingbusiness/internal/role"
 	"github.com/mohammadVatandoost/ingbusiness/internal/savedmessages"
@@ -58,7 +57,7 @@ func serveAdmin(cmd *cobra.Command, args []string) error {
 
 	usersDirectory := users.NewDirectory(log, db)
 	savedMessagesDirectory := savedmessages.NewDirectory(log, db)
-	ingAccountsDirectory := ingaccounts.NewDirectory(log, db)
+	ingAccountsDirectory := ingpages.NewDirectory(log, db)
 	organizationDirectory := organization.NewDirectory(log, db)
 	rolesDirectory := roles.NewDirectory(log, db)
 	accessDirectory := access.NewDirectory(log, db)
@@ -66,7 +65,8 @@ func serveAdmin(cmd *cobra.Command, args []string) error {
 	authenticationService := authentication.New(log, usersDirectory, conf.Auth)
 	ingMessengerService := ingmessenger.New(usersDirectory, ingAccountsDirectory, savedMessagesDirectory)
 	frequentMessagesService := frequentmessages.New(savedMessagesDirectory)
-	iamService := iam.New(organizationDirectory, rolesDirectory, accessDirectory, usersDirectory)
+	iamService := iam.New(organizationDirectory, rolesDirectory, ingAccountsDirectory,
+		accessDirectory, usersDirectory)
 	userService := user.New(usersDirectory)
 
 	serverREST := restAPI.New(log, conf.Rest, authenticationService, userService, iamService,

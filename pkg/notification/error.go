@@ -10,3 +10,12 @@ func MakeError(title string, message string) *v1.Notification {
 		Color:   "red",
 	}
 }
+
+func MakeSuccess(title string, message string) *v1.Notification {
+	return &v1.Notification{
+		Title:   title,
+		Message: message,
+		Icon:    "",
+		Color:   "green",
+	}
+}

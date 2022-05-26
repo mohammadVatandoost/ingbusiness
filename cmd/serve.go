@@ -6,7 +6,6 @@ import (
 	"github.com/mohammadVatandoost/ingbusiness/internal/access"
 	restAPI "github.com/mohammadVatandoost/ingbusiness/internal/core/rest"
 	"github.com/mohammadVatandoost/ingbusiness/internal/database"
-	"github.com/mohammadVatandoost/ingbusiness/internal/ingaccounts"
 	"github.com/mohammadVatandoost/ingbusiness/internal/organization"
 	roles "github.com/mohammadVatandoost/ingbusiness/internal/role"
 	"github.com/mohammadVatandoost/ingbusiness/internal/savedmessages"
@@ -63,7 +62,7 @@ func serve(cmd *cobra.Command, args []string) error {
 
 	usersDirectory := users.NewDirectory(log, db)
 	savedMessagesDirectory := savedmessages.NewDirectory(log, db)
-	ingAccountsDirectory := ingaccounts.NewDirectory(log, db)
+	ingAccountsDirectory := ingpages.NewDirectory(log, db)
 	organizationDirectory := organization.NewDirectory(log, db)
 	accessDirectory := access.NewDirectory(log, db)
 	rolesDirectory := roles.NewDirectory(log, db)

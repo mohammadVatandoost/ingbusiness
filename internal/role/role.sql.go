@@ -146,6 +146,29 @@ func (q *Queries) GetRoleByOrganizationID(ctx context.Context, organizationID in
 	return items, nil
 }
 
+const getRoleByOrganizationIDAndRoleType = `-- name: GetRoleByOrganizationIDAndRoleType :one
+SELECT id, organization_id, creator_id, role_type, create_time, update_time FROM roles WHERE organization_id = $1 and role_type = $2
+`
+
+type GetRoleByOrganizationIDAndRoleTypeParams struct {
+	OrganizationID int32
+	RoleType       int32
+}
+
+func (q *Queries) GetRoleByOrganizationIDAndRoleType(ctx context.Context, arg GetRoleByOrganizationIDAndRoleTypeParams) (Role, error) {
+	row := q.db.QueryRowContext(ctx, getRoleByOrganizationIDAndRoleType, arg.OrganizationID, arg.RoleType)
+	var i Role
+	err := row.Scan(
+		&i.ID,
+		&i.OrganizationID,
+		&i.CreatorID,
+		&i.RoleType,
+		&i.CreateTime,
+		&i.UpdateTime,
+	)
+	return i, err
+}
+
 const getRoles = `-- name: GetRoles :many
 SELECT id, organization_id, creator_id, role_type, create_time, update_time FROM roles
 `

@@ -12,7 +12,7 @@ CREATE TABLE roles (
         FOREIGN KEY(creator_id)
             REFERENCES users(id)
             ON DELETE CASCADE,
-    CONSTRAINT roles_unique UNIQUE (organization_id, creator_id, role_type),
+    CONSTRAINT roles_unique UNIQUE (organization_id, role_type),
     create_time TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
     update_time TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP
 );

@@ -12,3 +12,18 @@ message OrganizationPermission {
   string email = 1;
   int32 id = 3;
 }
+
+message OrganizationAccess {
+    int32 OrganizationID = 1;
+    string OrganizationName = 2;
+    int32 UserID = 3;
+    int32 RoleID = 4;
+}
+
+message IngPage {
+  string name = 1;
+  string token = 2;
+  int32 organization_id = 3;
+  int32 id = 4;
+}
+

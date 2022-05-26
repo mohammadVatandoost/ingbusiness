@@ -62,6 +62,16 @@ func (d *Directory) GetRoleByOrganizationID(ctx context.Context, ownerID int32) 
 	return roles, nil
 }
 
+func (d *Directory) GetRoleByOrganizationIDAndRoleType(ctx context.Context,
+	arg GetRoleByOrganizationIDAndRoleTypeParams) (Role, error) {
+	role, err := d.querier.GetRoleByOrganizationIDAndRoleType(ctx, arg)
+	if err != nil {
+		return role, status.Errorf(codes.Internal, "unexpected error GetRoleByOrganizationIDAndRoleType: %s",
+			err.Error())
+	}
+	return role, nil
+}
+
 func (d *Directory) GetRoleByCreatorID(ctx context.Context, creatorID int32) ([]Role, error) {
 	roles, err := d.querier.GetRoleByCreatorID(ctx, creatorID)
 	if err != nil {
