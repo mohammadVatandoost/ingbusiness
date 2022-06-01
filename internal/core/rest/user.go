@@ -2,11 +2,12 @@ package rest
 
 import (
 	"context"
+	"net/http"
+	"time"
+
 	"github.com/gin-gonic/gin"
 	userV1 "github.com/mohammadVatandoost/ingbusiness/api/services/user/v1"
 	"github.com/mohammadVatandoost/ingbusiness/pkg/jwt"
-	"net/http"
-	"time"
 )
 
 func (s *Server) GetUserProfile(c *gin.Context) {
@@ -29,8 +30,6 @@ func (s *Server) GetUserProfile(c *gin.Context) {
 			Phone:        u.Phone,
 			Username:     u.Username,
 			ProfileImage: u.ProfileImage,
-		},
-		nil,
-		"", nil)
+		}, nil, "", nil)
 
 }
