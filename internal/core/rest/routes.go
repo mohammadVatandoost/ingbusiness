@@ -24,7 +24,7 @@ func (s *Server) Routes() {
 	authenticationGroup := groupV1.Group(authPrefix)
 	authenticationGroup.POST("/signUp", s.SignUp)
 	authenticationGroup.POST("/signIn", s.SignIn)
-	authenticationGroup.GET("/{provider}/callback", s.OAuth2CallBack)
+	authenticationGroup.GET("/{provider}/callback", s.OAuth2CallBack)  // for test: http://localhost:9077/v1/auth/facebook/callback
 	authenticationGroup.GET("/{provider}", s.OAuth2)
 
 	// user

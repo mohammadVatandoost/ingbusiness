@@ -6,6 +6,7 @@ import (
 	"github.com/mohammadVatandoost/ingbusiness/internal/access"
 	restAPI "github.com/mohammadVatandoost/ingbusiness/internal/core/rest"
 	"github.com/mohammadVatandoost/ingbusiness/internal/database"
+	"github.com/mohammadVatandoost/ingbusiness/internal/ingpages"
 	"github.com/mohammadVatandoost/ingbusiness/internal/organization"
 	roles "github.com/mohammadVatandoost/ingbusiness/internal/role"
 	"github.com/mohammadVatandoost/ingbusiness/internal/savedmessages"
@@ -70,7 +71,7 @@ func serve(cmd *cobra.Command, args []string) error {
 	authenticationService := authentication.New(log, usersDirectory, conf.Auth)
 	ingMessengerService := ingmessenger.New(usersDirectory, ingAccountsDirectory, savedMessagesDirectory)
 	frequentMessagesService := frequentmessages.New(savedMessagesDirectory)
-	iamService := iam.New(organizationDirectory, rolesDirectory, accessDirectory, usersDirectory)
+	iamService := iam.New(organizationDirectory, rolesDirectory, ingAccountsDirectory, accessDirectory, usersDirectory)
 	userService := user.New(usersDirectory)
 
 	serverREST := restAPI.New(log, conf.Rest, authenticationService, userService, iamService,

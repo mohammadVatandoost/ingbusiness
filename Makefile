@@ -85,6 +85,9 @@ collect_migrations:
 		cp -a $(dir)/migrations/. internal/database/migrations; \
 	)
 
+db_service:
+
+
 fmt: ## to run `go fmt` on all source code
 	gofmt -s -w $(SRCS)
 

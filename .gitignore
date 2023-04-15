@@ -28,3 +28,4 @@ debug.test
 .gitsecret/keys/random_seed
 !*.secret
 
+ing.conf

@@ -1,6 +1,7 @@
 package ingmessenger
 
 import (
+	"github.com/mohammadVatandoost/ingbusiness/internal/ingpages"
 	"github.com/mohammadVatandoost/ingbusiness/internal/savedmessages"
 	"github.com/mohammadVatandoost/ingbusiness/internal/users"
 )
